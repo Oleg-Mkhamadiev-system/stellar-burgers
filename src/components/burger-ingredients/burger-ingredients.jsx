@@ -29,28 +29,28 @@ function BurgerIngredients ({ ingredients }) {
             <div className={`custom-scroll pt-10 ${styles.ingredientsContainer}`}>
                 <h2 className="text text_type_main-medium">Булки</h2>
                 <ul className={`${styles.ingredientsList} pl-4 pt-6 pb-10 pr-2`}>
-                    {buns.map((item, index) => (
+                    {buns.map((item) => (
                         <IngredientItem
                         count={1}
                         item={item}
-                        key={item._id + index} />
+                        key={item._id} />
                     ))}
                 </ul>
                 <h2 className="text text_type_main-medium">Соусы</h2>
                 <ul className={`${styles.ingredientsList} pl-4 pt-6 pb-8 pr-2`}>
-                    {sauces.map((item, index) => (
+                    {sauces.map((item) => (
                         <IngredientItem
                         count={1}
                         item={item}
-                        key={item._id + index} />
+                        key={item._id} />
                     ))}
                 </ul>
                 <h2 className="text text_type_main-medium">Начинки</h2>
                 <ul className={`${styles.ingredientsList} pl-4`}>
-                    {mains.map((item, index) => (
+                    {mains.map((item) => (
                         <IngredientItem
                         item={item}
-                        key={item._id + index} />
+                        key={item._id} />
                     ))}
                 </ul>
             </div>

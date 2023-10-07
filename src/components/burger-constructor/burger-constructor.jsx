@@ -19,8 +19,8 @@ function BurgerConstructor ({ ingredients }) {
     return (
         <div className={`${styles.burgerContainer} pt-25 pl-4 ml-10`}>
             <section className="pl-8">
-                {buns.map((ingredient) => (
-                    <div className={`${styles.burgerComponents} ml-6 pr-2`}> 
+                {buns.map((ingredient, index) => (
+                    <div className={`${styles.burgerComponents} ml-6 pr-2`} key={ingredient._id + index}> 
                       <ConstructorElement
                       extraClass="mt-4 mb-4"
                       key={ingredient._id}
@@ -35,8 +35,8 @@ function BurgerConstructor ({ ingredients }) {
             </section>
             <section className={`custom-scroll ${styles.componentsContainer}`}>
                 <ul className={styles.componentsList}>
-                    {mains.map((ingredient) => (
-                        <li className={`${styles.componentsItem}`}>
+                    {mains.map((ingredient, index) => (
+                        <li className={`${styles.componentsItem}`} key={ingredient._id + index}>
                             <DragIcon type="primary" />
                             <ConstructorElement
                             extraClass="mb-4"
@@ -51,13 +51,13 @@ function BurgerConstructor ({ ingredients }) {
                 </ul>
             </section>
             <section className="pl-8">
-                {buns.map((ingredient) => (
-                    <div className={`${styles.burgerComponents} ml-6 pr-2`}>
+                {buns.map((ingredient, index) => (
+                    <div className={`${styles.burgerComponents} ml-6 pr-2`} key={ingredient._id + index}>
                        <ConstructorElement
                        key={ingredient._id}
                        type="bottom"
                        isLocked={true}
-                       text={`${ingredient.name} (верх)`}
+                       text={`${ingredient.name} (низ)`}
                        price={ingredient.price}
                        thumbnail={ingredient["image_mobile"]}
                        />
