@@ -1,0 +1,19 @@
+.listItem {
+    width: 272px;
+    height: 208px;
+    position: relative;
+    text-align: center;
+}
+
+.priceItem {
+    display: flex;
+    justify-content: center;
+}
+
+.visible {
+    display: flex;
+}
+
+.hidden {
+    display: none;
+}

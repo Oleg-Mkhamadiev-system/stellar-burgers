@@ -1,0 +1,22 @@
+.container {
+    width: 600px;
+    height: 912px;
+}
+
+.ingredientsContainer {
+    height: 756px;
+    overflow-y: scroll;
+    justify-content: space-between;
+}
+
+.ingredientsList {
+    display: flex;
+    list-style: none;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 0;
+}
+
+.ingredientsList:last-of-type {
+    margin-left: 24px;
+}

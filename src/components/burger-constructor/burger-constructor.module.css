@@ -1,0 +1,34 @@
+.burgerContainer {
+    width: 600px;
+    height: 912px;
+}
+
+.burgerComponents:last-child {
+    display: none;
+}
+
+.componentsContainer {
+    height: 482px;
+    overflow-y: scroll;
+}
+
+.componentsList {
+    margin: 0px;
+}
+
+.componentsItem {
+    display: flex;
+    align-items: center;
+}
+
+.infoContainer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.iconContainer svg {
+    height: 36px;
+    width: 36px;
+    object-fit: cover;
+}
