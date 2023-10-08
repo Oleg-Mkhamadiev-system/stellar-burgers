@@ -1,0 +1,4 @@
+.orderContainer {
+    display: flex;
+    flex-direction: column;
+}
