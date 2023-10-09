@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { ingredientPropType } from '../../utils/prop-types';
 
 
-function OrderDetails ({ item, count }) {
+function OrderDetails () {
     return (
         <section className={styles.orderContainer}>
             <p className={`${styles.orderDigits} text text_type_digits-large`}>
@@ -18,7 +18,7 @@ function OrderDetails ({ item, count }) {
                 Ваш заказ начали готовить
             </p>
             <p className="text text_type_main-small">
-                идентификатор заказа
+                Дождитесь готовности на орбитальной станции
             </p>
         </section>
     );

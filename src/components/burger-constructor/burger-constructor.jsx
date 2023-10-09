@@ -4,8 +4,9 @@ import { ConstructorElement, DragIcon, CurrencyIcon, Button
 import { useMemo } from 'react';
 import { ingredientPropType } from '../../utils/prop-types';
 import PropTypes from 'prop-types';
+import OrderDetails from '../order-details/order-details';
 
-function BurgerConstructor ({ ingredients }) {
+function BurgerConstructor ({ ingredients, handleOpenModal }) {
     const buns = useMemo(
         () => ingredients.filter((item) => item.type === "bun"),
         [ingredients]
@@ -69,7 +70,11 @@ function BurgerConstructor ({ ingredients }) {
                 <div className={`${styles.iconContainer} pr-10`}>
                   <CurrencyIcon type="primary" />
                 </div>
-                <Button htmlType="button" type="primary" size="large">Оформить заказ
+                <Button htmlType="button" 
+                type="primary" 
+                size="large"
+                onClick={() => handleOpenModal(<OrderDetails />)}>
+                    Оформить заказ
                 </Button>
             </section>
         </div>
@@ -77,7 +82,8 @@ function BurgerConstructor ({ ingredients }) {
 }
 
 BurgerConstructor.propTypes = {
-    ingredients: PropTypes.arrayOf(ingredientPropType).isRequired
+    ingredients: PropTypes.arrayOf(ingredientPropType).isRequired,
+    handleOpenModal: PropTypes.func
 };
 
 export default BurgerConstructor;
