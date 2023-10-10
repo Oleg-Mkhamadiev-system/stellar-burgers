@@ -12,8 +12,10 @@ function App() {
     <div className={styles.app}>
       <AppHeader />
       <main className="content-container">
-        <BurgerIngredients ingredients={ingredients} />
-        <BurgerConstructor ingredients={orderIngredients} />
+        <BurgerIngredients ingredients={ingredients}
+        handleOpenModal={handleOpenModal} />
+        <BurgerConstructor ingredients={orderIngredients}
+        handleOpenModal={handleOpenModal} />
       </main>
     </div>
   );
