@@ -1,14 +1,17 @@
+//import { data } from "../utils/data";
 
 const baseUrl = "https://norma.nomoreparties.space/api";
 
-async function api (url, path) {
+async function api (path) {
     const url = `${baseUrl}${path}`,
     options = {
         method: "GET",
         headers: {
             ...headers
         },
-        body: body
+        body: JSON.stringify({
+            data: data
+        })
     };
 
     const res = await fetch(url, options);
