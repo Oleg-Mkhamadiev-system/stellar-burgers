@@ -1,5 +1,5 @@
 import styles from './order-details.module.css';
-import { done } from '../../img/done.png';
+import done from '../../img/done.png';
 import PropTypes from 'prop-types';
 import { ingredientPropType } from '../../utils/prop-types';
 
@@ -13,7 +13,7 @@ function OrderDetails () {
             <p className="text text_type_main-default">
                 идентификатор заказа
             </p>
-            <img src={done} alt="галочка подтверждения заказа" />
+            <img className={done} src={done} alt="галочка подтверждения заказа" />
             <p className="text text_type_main-small">
                 Ваш заказ начали готовить
             </p>

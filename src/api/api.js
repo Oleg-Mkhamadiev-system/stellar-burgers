@@ -2,16 +2,14 @@
 
 const baseUrl = "https://norma.nomoreparties.space/api";
 
-async function api (path) {
+async function api (path, params={}) {
     const url = `${baseUrl}${path}`,
     options = {
-        method: "GET",
+        method: params?.method || "GET",
         headers: {
-            ...headers
+            ...params?.headers
         },
-        body: JSON.stringify({
-            data: data
-        })
+        body: params?.body
     };
 
     const res = await fetch(url, options);
@@ -22,6 +20,8 @@ async function api (path) {
     }
 };
 
-export function getInitialIngredients () {
+function getIngredients () {
     return api("/ingredients");
-}
+};
+
+export { getIngredients };

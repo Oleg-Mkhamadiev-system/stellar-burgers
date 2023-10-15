@@ -3,21 +3,40 @@ import AppHeader from "../app-header/app-header";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 //import { data as ingredients } from "../../utils/data";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
-import { orderIngredients } from "../../utils/order";
-import { useEffect, useState } from "react";
-import { getInitialIngredients } from "../../api/api";
-
+//import { orderIngredients } from "../../utils/order";
+import { useCallback, useEffect, useState } from "react";
+import { getIngredients } from "../../api/api";
+import Modal from "../modal/modal";
+import { data } from "../../utils/data";
 
 function App() {
+  const [orderIngredients, setOrderIngredients] = useState([]);
+
+  useEffect(() => {
+    getIngredients().then((data) => {
+      setOrderIngredients(data.data)
+    })
+  }, []);
+
   const [ingredients, setIngredients] = useState([]);
 
   useEffect(() => {
-    getInitialIngredients = async () => {
-      const data = await res.json();
-      setIngredients({ data: data.getInitialIngredients });
-    }
-    getInitialIngredients();
-  }, [])
+    getIngredients().then((data) => {
+      setIngredients(data.data);
+    })
+  }, []);
+
+  const [isModalActive, setIsModalActive] = useState(false)
+  const [isModal, setIsModal] = useState();
+
+  const handleOpenModal = useCallback((content) => {
+    setIsModal(content);
+    setIsModalActive(true);
+  }, []);
+
+  const handleCloseModal = useCallback(() => {
+    setIsModalActive(false);
+  }, []);
 
   return (
     <div className={styles.app}>
@@ -27,9 +46,14 @@ function App() {
         handleOpenModal={handleOpenModal} />
         <BurgerConstructor ingredients={orderIngredients}
         handleOpenModal={handleOpenModal} />
+        {isModalActive &&
+          (<Modal onClose={handleCloseModal}>
+            {isModal}
+          </Modal>)
+        }
       </main>
     </div>
   );
-}
+};
 
 export default App;
