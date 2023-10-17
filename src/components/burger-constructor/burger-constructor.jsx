@@ -1,12 +1,15 @@
 import styles from './burger-constructor.module.css';
-import { ConstructorElement, DragIcon, CurrencyIcon, Button 
+import { ConstructorElement, DragIcon, CurrencyIcon, Button
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { ingredientPropType } from '../../utils/prop-types';
 import PropTypes from 'prop-types';
 import OrderDetails from '../order-details/order-details';
+import Modal from '../modal/modal';
 
-function BurgerConstructor ({ ingredients, handleOpenModal }) {
+function BurgerConstructor ({ ingredients }) {
+  const [currentBurger, setOpenCurrentBurger] = useState();
+
     const buns = useMemo(
         () => ingredients.filter((item) => item.type === "bun"),
         [ingredients]
@@ -21,7 +24,7 @@ function BurgerConstructor ({ ingredients, handleOpenModal }) {
         <div className={`${styles.burgerContainer} pt-25 pl-4 ml-10`}>
             <section className="pl-8">
                 {buns.map((ingredient, index) => (
-                    <div className={`${styles.burgerComponents} ml-6 pr-2`} key={ingredient._id + index}> 
+                    <div className={`${styles.burgerComponents} ml-6 pr-2`} key={ingredient._id + index}>
                       <ConstructorElement
                       extraClass="mt-4 mb-4"
                       key={ingredient._id}
@@ -70,12 +73,17 @@ function BurgerConstructor ({ ingredients, handleOpenModal }) {
                 <div className={`${styles.iconContainer} pr-10`}>
                   <CurrencyIcon type="primary" />
                 </div>
-                <Button htmlType="button" 
-                type="primary" 
+                <Button htmlType="button"
+                type="primary"
                 size="large"
-                onClick={() => handleOpenModal(<OrderDetails />)}>
+                onClick={() => setOpenCurrentBurger(<OrderDetails />)}>
                     Оформить заказ
                 </Button>
+                {currentBurger &&
+                <Modal onClose={() => setOpenCurrentBurger(null)}>
+                  <OrderDetails />
+                </Modal>
+                }
             </section>
         </div>
     );
@@ -83,7 +91,6 @@ function BurgerConstructor ({ ingredients, handleOpenModal }) {
 
 BurgerConstructor.propTypes = {
     ingredients: PropTypes.arrayOf(ingredientPropType).isRequired,
-    handleOpenModal: PropTypes.func
 };
 
 export default BurgerConstructor;

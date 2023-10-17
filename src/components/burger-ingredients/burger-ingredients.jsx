@@ -1,13 +1,16 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Tabs } from '../tabs/tabs';
 import styles from './burger-ingredients.module.css';
 import IngredientItem from '../ingredient-item/ingredient-item';
 import PropTypes from 'prop-types';
 import { ingredientPropType } from '../../utils/prop-types';
 import IngredientDetails from '../ingredient-details/ingredient-details';
+import Modal from '../modal/modal';
 
 
-function BurgerIngredients ({ ingredients, handleOpenModal }) {
+function BurgerIngredients ({ ingredients }) {
+  const [currentIngredient, setCurrentOpenIngredient] = useState();
+
     const buns = useMemo(
         () => ingredients.filter((item) => item.type === "bun"),
         [ingredients]
@@ -34,8 +37,8 @@ function BurgerIngredients ({ ingredients, handleOpenModal }) {
                         <IngredientItem
                         count={1}
                         item={item}
-                        key={item._id} 
-                        onClick={() => handleOpenModal(<IngredientDetails ingredient={item} />)}
+                        key={item._id}
+                        onClick={() => setCurrentOpenIngredient(<IngredientDetails ingredient={item} />)}
                         />
                     ))}
                 </ul>
@@ -45,8 +48,8 @@ function BurgerIngredients ({ ingredients, handleOpenModal }) {
                         <IngredientItem
                         count={1}
                         item={item}
-                        key={item._id} 
-                        onClick={() => handleOpenModal(<IngredientDetails ingredient={item} />)}
+                        key={item._id}
+                        onClick={() => setCurrentOpenIngredient(<IngredientDetails ingredient={item} />)}
                         />
                     ))}
                 </ul>
@@ -55,19 +58,24 @@ function BurgerIngredients ({ ingredients, handleOpenModal }) {
                     {mains.map((item) => (
                         <IngredientItem
                         item={item}
-                        key={item._id} 
-                        onClick={() => handleOpenModal(<IngredientDetails ingredient={item} />)}
+                        key={item._id}
+                        onClick={() => setCurrentOpenIngredient(<IngredientDetails ingredient={item} />) }
                         />
                     ))}
                 </ul>
             </div>
+            {currentIngredient &&
+              <Modal>
+                onClose{() => setCurrentOpenIngredient(null)}
+                <IngredientDetails ingredient={currentIngredient} />
+              </Modal>
+            }
         </section>
     );
 };
 
 BurgerIngredients.propTypes = {
     ingredients: PropTypes.arrayOf(ingredientPropType).isRequired,
-    handleOpenModal: PropTypes.func
 };
 
 export default BurgerIngredients;

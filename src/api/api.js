@@ -5,11 +5,11 @@ const baseUrl = "https://norma.nomoreparties.space/api";
 async function api (path, params={}) {
     const url = `${baseUrl}${path}`,
     options = {
-        method: params?.method || "GET",
+        method: "GET",
         headers: {
-            ...params?.headers
+            ...params.headers
         },
-        body: params?.body
+        body: params.body
     };
 
     const res = await fetch(url, options);
