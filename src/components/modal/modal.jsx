@@ -1,6 +1,5 @@
 import styles from './modal.module.css';
 import { useState, useRef, useCallback, useEffect } from 'react';
-//import Portal, { createContainer } from '../portal/portal';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import PropTypes from 'prop-types';
 import Portal, { createContainer } from '../portal/portal';
@@ -23,7 +22,7 @@ function Modal ({ onClose, children }) {
         };
 
         const handleCloseEscape = (evt) => {
-            if (evt.target === 'Escape') {
+            if (evt.key === 'Escape') {
                 onClose?.();
             }
         };
@@ -62,51 +61,6 @@ function Modal ({ onClose, children }) {
         : null
     );
 };
-
-/* const modalOverlayRef = useRef(null);
-
-const handleClick = useCallback((evt) => {
-  if (evt.target === modalOverlayRef.current) {
-    onClose();
-  }
-}, [onClose]);
-
-const handleCloseEscape = useCallback((evt) => {
-  if (evt.target === 'Escape') {
-    onClose();
-  }
-}, [onClose]);
-
-const handleClose = useCallback(() => {
-  onClose();
-}, [onClose]);
-
-useEffect(() => {
-        document.addEventListener('click', handleClick);
-        document.addEventListener('keydown', handleCloseEscape);
-
-        return () => {
-        document.addEventListener('click', handleClick);
-        document.addEventListener('keydown', handleCloseEscape);
-        }
-}, [handleClick, handleCloseEscape]);
-
-return createPortal(
-  <div className={styles.modalContainer}
-              ref={modalOverlayRef} onClick={handleClick}>
-                <div className={styles.modalContent}>
-                    <button
-                    type="button"
-                    className={styles.closeButton}
-                    onClick={handleClose}
-                    >
-                    <CloseIcon type="primary" />
-                    </button>
-                   {children}
-                </div>
-            </div>
-);
-}; */
 
 Modal.propTypes = {
   children: PropTypes.node,

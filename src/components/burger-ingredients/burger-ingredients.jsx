@@ -1,15 +1,11 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { Tabs } from '../tabs/tabs';
 import styles from './burger-ingredients.module.css';
 import IngredientItem from '../ingredient-item/ingredient-item';
 import PropTypes from 'prop-types';
 import { ingredientPropType } from '../../utils/prop-types';
-import IngredientDetails from '../ingredient-details/ingredient-details';
-import Modal from '../modal/modal';
-
 
 function BurgerIngredients ({ ingredients }) {
-  const [currentIngredient, setCurrentOpenIngredient] = useState();
 
     const buns = useMemo(
         () => ingredients.filter((item) => item.type === "bun"),
@@ -38,7 +34,6 @@ function BurgerIngredients ({ ingredients }) {
                         count={1}
                         item={item}
                         key={item._id}
-                        onClick={() => setCurrentOpenIngredient(<IngredientDetails ingredient={item} />)}
                         />
                     ))}
                 </ul>
@@ -49,7 +44,6 @@ function BurgerIngredients ({ ingredients }) {
                         count={1}
                         item={item}
                         key={item._id}
-                        onClick={() => setCurrentOpenIngredient(<IngredientDetails ingredient={item} />)}
                         />
                     ))}
                 </ul>
@@ -59,17 +53,10 @@ function BurgerIngredients ({ ingredients }) {
                         <IngredientItem
                         item={item}
                         key={item._id}
-                        onClick={() => setCurrentOpenIngredient(<IngredientDetails ingredient={item} />) }
                         />
                     ))}
                 </ul>
             </div>
-            {currentIngredient &&
-              <Modal>
-                onClose{() => setCurrentOpenIngredient(null)}
-                <IngredientDetails ingredient={currentIngredient} />
-              </Modal>
-            }
         </section>
     );
 };

@@ -8,7 +8,7 @@ import OrderDetails from '../order-details/order-details';
 import Modal from '../modal/modal';
 
 function BurgerConstructor ({ ingredients }) {
-  const [currentBurger, setOpenCurrentBurger] = useState();
+  const [currentBurger, setOpenCurrentBurger] = useState(false);
 
     const buns = useMemo(
         () => ingredients.filter((item) => item.type === "bun"),
@@ -76,11 +76,11 @@ function BurgerConstructor ({ ingredients }) {
                 <Button htmlType="button"
                 type="primary"
                 size="large"
-                onClick={() => setOpenCurrentBurger(<OrderDetails />)}>
+                onClick={() => setOpenCurrentBurger(true)}>
                     Оформить заказ
                 </Button>
                 {currentBurger &&
-                <Modal onClose={() => setOpenCurrentBurger(null)}>
+                <Modal onClose={() => setOpenCurrentBurger(false)}>
                   <OrderDetails />
                 </Modal>
                 }
