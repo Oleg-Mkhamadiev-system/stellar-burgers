@@ -2,21 +2,14 @@ import styles from './modal.module.css';
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import PropTypes from 'prop-types';
-import Portal, { createContainer } from '../portal/portal';
+import { createPortal } from 'react-dom';
 
 function Modal ({ onClose, children }) {
-    const modalRootRef = useRef(null);
-    const modalContainerId = "modal-container-id";
-    const [isMounted, setMounted] = useState(false);
-
-    useEffect(() => {
-        createContainer({ id: modalContainerId });
-        setMounted(true)
-    }, []);
+    const modalOverlay = useRef(null);
 
     useEffect(() => {
         const handleCloseContainer = (evt) => {
-            if (modalRootRef.current === evt.target) {
+            if (modalOverlay.current === evt.target) {
                 onClose?.();
             }
         };
@@ -31,34 +24,32 @@ function Modal ({ onClose, children }) {
         document.addEventListener('keydown', handleCloseEscape);
 
         return () => {
-        document.addEventListener('click', handleCloseContainer);
-        document.addEventListener('keydown', handleCloseEscape);
+        document.removeEventListener('click', handleCloseContainer);
+        document.removeEventListener('keydown', handleCloseEscape);
       };
     }, [onClose]);
 
-    const handleClose = useCallback(() => {
+    const handleClose = () => {
         onClose?.();
-    }, [onClose]);
+    };
 
-    return (
-        isMounted
-        ? (<Portal id={modalContainerId}>
+    return createPortal(
+          <div>
             <div className={styles.modalContainer}
-              ref={modalRootRef} data-testid={modalContainerId}>
+              ref={modalOverlay}>
                 <div className={styles.modalContent}>
                     <button
                     type="button"
-                    className={styles.closeButton}
-                    onClose={handleClose}
-                    data-testid="modal-close-button"
+                    className={`${styles.closeButton}`}
+                    onClick={handleClose}
                     >
                     <CloseIcon type="primary" />
                     </button>
-                   {children}
+                      {children}
                 </div>
             </div>
-          </Portal>)
-        : null
+          </div>,
+            document.getElementById("modals")
     );
 };
 

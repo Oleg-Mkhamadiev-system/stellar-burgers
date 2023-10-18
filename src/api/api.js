@@ -2,7 +2,7 @@
 
 const baseUrl = "https://norma.nomoreparties.space/api";
 
-async function api (path, params={}) {
+async function makeRequest (path, params={}) {
     const url = `${baseUrl}${path}`,
     options = {
         method: "GET",
@@ -21,7 +21,7 @@ async function api (path, params={}) {
 };
 
 function getIngredients () {
-    return api("/ingredients");
+    return makeRequest("/ingredients");
 };
 
 export { getIngredients };

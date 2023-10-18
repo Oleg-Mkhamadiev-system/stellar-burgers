@@ -1,6 +1,5 @@
 import styles from './order-details.module.css';
 import done from '../../img/done.png';
-import PropTypes from 'prop-types';
 
 
 function OrderDetails () {

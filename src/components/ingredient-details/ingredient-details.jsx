@@ -53,7 +53,7 @@ function IngredientDetails ({ ingredient }) {
     );
 };
 
-IngredientDetails.protoType = {
+IngredientDetails.propTypes = {
     ingredient: ingredientPropType.isRequired
 };
 

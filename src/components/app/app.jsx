@@ -4,24 +4,18 @@ import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 //import { data as ingredients } from "../../utils/data";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
 //import { orderIngredients } from "../../utils/order";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getIngredients } from "../../api/api";
 
 
 function App() {
-  const [orderIngredients, setOrderIngredients] = useState([]);
-
-  useEffect(() => {
-    getIngredients().then((data) => {
-      setOrderIngredients(data.data)
-    })
-  }, []);
-
   const [ingredients, setIngredients] = useState([]);
 
   useEffect(() => {
     getIngredients().then((data) => {
       setIngredients(data.data);
+    }).catch((err) => {
+      console.log(err);
     })
   }, []);
 
@@ -30,7 +24,7 @@ function App() {
       <AppHeader />
       <main className="content-container">
         <BurgerIngredients ingredients={ingredients} />
-        <BurgerConstructor ingredients={orderIngredients} />
+        <BurgerConstructor ingredients={ingredients} />
       </main>
     </div>
   );
