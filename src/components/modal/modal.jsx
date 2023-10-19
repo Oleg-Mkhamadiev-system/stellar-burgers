@@ -1,42 +1,42 @@
 import styles from './modal.module.css';
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useRef, useCallback, useEffect } from 'react';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import PropTypes from 'prop-types';
 import { createPortal } from 'react-dom';
+import ModalOverlay from '../modal-overlay/modal-overlay';
 
 function Modal ({ onClose, children }) {
-    const modalOverlay = useRef(null);
+  const modalRoot = document.getElementById("modals");
+  const modalOverlayRef = useRef(null);
 
     useEffect(() => {
-        const handleCloseContainer = (evt) => {
-            if (modalOverlay.current === evt.target) {
-                onClose?.();
-            }
-        };
-
         const handleCloseEscape = (evt) => {
             if (evt.key === 'Escape') {
                 onClose?.();
             }
         };
 
+        const handleCloseContainer = (evt) => {
+          if (modalOverlayRef.current === evt.target) {
+              onClose?.();
+          }
+      };
+
         document.addEventListener('click', handleCloseContainer);
         document.addEventListener('keydown', handleCloseEscape);
 
         return () => {
-        document.removeEventListener('click', handleCloseContainer);
         document.removeEventListener('keydown', handleCloseEscape);
+        document.removeEventListener('click', handleCloseContainer);
       };
     }, [onClose]);
 
-    const handleClose = () => {
+    const handleClose = useCallback(() => {
         onClose?.();
-    };
+    }, [onClose]);
 
     return createPortal(
-          <div>
-            <div className={styles.modalContainer}
-              ref={modalOverlay}>
+          <ModalOverlay ref={modalOverlayRef} onClick={handleClose}>
                 <div className={styles.modalContent}>
                     <button
                     type="button"
@@ -47,9 +47,8 @@ function Modal ({ onClose, children }) {
                     </button>
                       {children}
                 </div>
-            </div>
-          </div>,
-            document.getElementById("modals")
+          </ModalOverlay>,
+          modalRoot
     );
 };
 
