@@ -1,11 +1,15 @@
 import styles from './burger-constructor.module.css';
-import { ConstructorElement, DragIcon, CurrencyIcon, Button 
+import { ConstructorElement, DragIcon, CurrencyIcon, Button
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { ingredientPropType } from '../../utils/prop-types';
 import PropTypes from 'prop-types';
+import OrderDetails from '../order-details/order-details';
+import Modal from '../modal/modal';
 
 function BurgerConstructor ({ ingredients }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
     const buns = useMemo(
         () => ingredients.filter((item) => item.type === "bun"),
         [ingredients]
@@ -20,7 +24,7 @@ function BurgerConstructor ({ ingredients }) {
         <div className={`${styles.burgerContainer} pt-25 pl-4 ml-10`}>
             <section className="pl-8">
                 {buns.map((ingredient, index) => (
-                    <div className={`${styles.burgerComponents} ml-6 pr-2`} key={ingredient._id + index}> 
+                    <div className={`${styles.burgerComponents} ml-6 pr-2`} key={ingredient._id + index}>
                       <ConstructorElement
                       extraClass="mt-4 mb-4"
                       key={ingredient._id}
@@ -69,15 +73,24 @@ function BurgerConstructor ({ ingredients }) {
                 <div className={`${styles.iconContainer} pr-10`}>
                   <CurrencyIcon type="primary" />
                 </div>
-                <Button htmlType="button" type="primary" size="large">Оформить заказ
+                <Button htmlType="button"
+                type="primary"
+                size="large"
+                onClick={() => setIsModalOpen(true)}>
+                    Оформить заказ
                 </Button>
+                {isModalOpen &&
+                <Modal onClose={() => setIsModalOpen(false)}>
+                  <OrderDetails />
+                </Modal>
+                }
             </section>
         </div>
     );
 }
 
 BurgerConstructor.propTypes = {
-    ingredients: PropTypes.arrayOf(ingredientPropType).isRequired
+    ingredients: PropTypes.arrayOf(ingredientPropType).isRequired,
 };
 
 export default BurgerConstructor;

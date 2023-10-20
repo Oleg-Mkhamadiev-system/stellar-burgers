@@ -1,0 +1,44 @@
+.detailsContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 64px;
+}
+
+.nutrientsList {
+  display: flex;
+  list-style: none;
+  justify-content: space-between;
+  padding: 0;
+  margin-bottom: 0;
+}
+
+.nutrientItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  margin-right: 20px;
+}
+
+.nutrientItem:last-child {
+  margin-right: 0;
+}
+
+.img {
+  width: 420px;
+  height: 240px;
+  align-self: center;
+}
+
+.navBar {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+}
