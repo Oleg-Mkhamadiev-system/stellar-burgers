@@ -7,10 +7,10 @@ import IngredientDetails from '../ingredient-details/ingredient-details';
 import Modal from '../modal/modal';
 
 // описываю компонент ингридиента и передаю пропсы
-function IngredientItem({ item, count }) {
-  const [currentIngredient, setOpenCurrentIngredient] = useState(false)
+function IngredientItem({ item, count, onSelect }) {
+  const handleClick = () => onSelect(item);
   return (
-    <li className={styles.listItem} onClick={() => setOpenCurrentIngredient(true)}>
+    <li className={styles.listItem} onClick={handleClick}>
       {count && <Counter count={count} size="default"
       extraClass={"m-1"} />}
       <img className="pl-4 pr-4" src={`${item.image}`} alt={`${item.name}`} />
@@ -19,11 +19,7 @@ function IngredientItem({ item, count }) {
         <CurrencyIcon type="primary" />
       </div>
       <p className="text text_type_main-default">{item.name}</p>
-      {currentIngredient &&
-              <Modal  onClose={() => setOpenCurrentIngredient(false)}>
-                <IngredientDetails ingredient={item} />
-              </Modal>
-            }
+
     </li>
   );
 };
@@ -31,6 +27,7 @@ function IngredientItem({ item, count }) {
 IngredientItem.propTypes = {
     item: ingredientPropType,
     count: PropTypes.number,
+    onSelect: PropTypes.func.isRequired
 };
 
 export default IngredientItem;

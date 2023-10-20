@@ -1,12 +1,14 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Tabs } from '../tabs/tabs';
 import styles from './burger-ingredients.module.css';
 import IngredientItem from '../ingredient-item/ingredient-item';
 import PropTypes from 'prop-types';
 import { ingredientPropType } from '../../utils/prop-types';
+import IngredientDetails from '../ingredient-details/ingredient-details';
+import Modal from '../modal/modal';
 
 function BurgerIngredients ({ ingredients }) {
-
+  const [currentIngredient, setOpenCurrentIngredient] = useState(false);
     const buns = useMemo(
         () => ingredients.filter((item) => item.type === "bun"),
         [ingredients]
@@ -34,6 +36,7 @@ function BurgerIngredients ({ ingredients }) {
                         count={1}
                         item={item}
                         key={item._id}
+                        onSelect={setOpenCurrentIngredient}
                         />
                     ))}
                 </ul>
@@ -44,6 +47,7 @@ function BurgerIngredients ({ ingredients }) {
                         count={1}
                         item={item}
                         key={item._id}
+                        onSelect={setOpenCurrentIngredient}
                         />
                     ))}
                 </ul>
@@ -53,9 +57,15 @@ function BurgerIngredients ({ ingredients }) {
                         <IngredientItem
                         item={item}
                         key={item._id}
+                        onSelect={setOpenCurrentIngredient}
                         />
                     ))}
                 </ul>
+                {currentIngredient &&
+              <Modal  onClose={() => setOpenCurrentIngredient(null)}>
+                <IngredientDetails ingredient={currentIngredient} />
+              </Modal>
+            }
             </div>
         </section>
     );

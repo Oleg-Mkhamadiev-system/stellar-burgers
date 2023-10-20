@@ -36,7 +36,7 @@ function Modal ({ onClose, children }) {
     }, [onClose]);
 
     return createPortal(
-          <ModalOverlay ref={modalOverlayRef} onClick={handleClose}>
+          <ModalOverlay ref={modalOverlayRef}>
                 <div className={styles.modalContent}>
                     <button
                     type="button"
