@@ -2,11 +2,8 @@ import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-c
 import styles from './ingredient-item.module.css';
 import PropTypes from 'prop-types';
 import { ingredientPropType } from '../../utils/prop-types';
-import { useState } from 'react';
-import IngredientDetails from '../ingredient-details/ingredient-details';
-import Modal from '../modal/modal';
 
-// описываю компонент ингридиента и передаю пропсы
+// описываю компонент ингредиента и передаю пропсы
 function IngredientItem({ item, count, onSelect }) {
   const handleClick = () => onSelect(item);
   return (
