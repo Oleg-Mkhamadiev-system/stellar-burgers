@@ -1,0 +1,49 @@
+import {
+  ADD_ITEM_CONSTRUCTOR,
+  DELETE_ITEM_CONSTRUCTOR,
+  ADD_UPDATE_MOVE_CONSTRUCTOR,
+  ADD_MOVE_BUN_CONSTRUCTOR
+} from './actions';
+
+const initialState = {
+  constructorItems: [],
+  hasBun: false
+};
+
+export const constructorReducer = (state = initialState, action) => {
+  switch(type.action) {
+    case ADD_ITEM_CONSTRUCTOR: {
+      return {
+        ...state,
+        constructorItems: [...state.constructorItems, action.payload]
+      }
+    };
+    case ADD_MOVE_BUN_CONSTRUCTOR:
+      return state.hasBun
+        ? {
+          ...state,
+          constructorItems: state.constructorItems.map(item => {
+            item === 'bun'
+            ? action.payload
+            : item
+          })
+        }
+        : {
+          ...state,
+          constructorItems: state.constructorItems, action: payload,
+          hasBun: true
+        }
+    case DELETE_ITEM_CONSTRUCTOR:
+      return {
+        ...state,
+        constructorItems: state.constructorItems.filter(item => {
+          item.uuid !== action.payload.uuid
+        })
+    }
+    case ADD_UPDATE_MOVE_CONSTRUCTOR:
+      return {
+        ...state,
+        constructorItems: action.payload
+      }
+  };
+};
