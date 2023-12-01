@@ -3,6 +3,7 @@ export const ADD_ITEM_CONSTRUCTOR = "ADD_ITEM_CONSTRUCTOR";
 export const DELETE_ITEM_CONSTRUCTOR = "DELETE_ITEM_CONSTRUCTOR";
 export const ADD_UPDATE_MOVE_CONSTRUCTOR = "ADD_UPDATE_MOVE_CONSTRUCTOR";
 export const ADD_MOVE_BUN_CONSTRUCTOR = "ADD_MOVE_BUN_CONSTRUCTOR";
+export const CLEAR_CONSTRUCTOR = "CLEAR_CONSTRUCTOR";
 
 
 export const addIngredient = (data) => {
@@ -30,5 +31,11 @@ export const deleteIngredient = (id) => {
   return {
     type: DELETE_ITEM_CONSTRUCTOR,
     payload: id
+  };
+};
+
+export const clearConstructor = () => {
+  return {
+    type: CLEAR_CONSTRUCTOR
   };
 };

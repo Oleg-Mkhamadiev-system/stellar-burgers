@@ -20,6 +20,17 @@ function BurgerConstructor ({ ingredients }) {
         [ingredients]
     );
 
+    /* const priceItem = useMemo(
+      () => {
+        return Array.from(data).reduce((acc, item) => {
+          return item.price === "bun"
+          ? acc + item.price * 2
+          : acc + item.price
+        }, 0)
+      },
+      [data]
+    ); */
+
     return (
         <div className={`${styles.burgerContainer} pt-25 pl-4 ml-10`}>
             <section className="pl-8">
@@ -69,7 +80,7 @@ function BurgerConstructor ({ ingredients }) {
                 ))}
             </section>
             <section className={`${styles.infoContainer} pt-10 pr-4`}>
-                <span className="text text_type_main-large pr-2">610</span>
+                <span className="text text_type_main-large pr-2">650</span>
                 <div className={`${styles.iconContainer} pr-10`}>
                   <CurrencyIcon type="primary" />
                 </div>
