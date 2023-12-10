@@ -5,7 +5,7 @@ import { ingredientListReducer } from './ingredientsArr';
 import { orderReducer } from "./order/reducers";
 
 export const rootReducer = combineReducers({
-  constructorIngredientsObj: constructorReducer,
+  constructorIngredientsList: constructorReducer,
   currentIngredientObj: currentIngredientReducer,
   ingredientsObj: ingredientListReducer,
   orderObj: orderReducer

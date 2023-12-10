@@ -2,9 +2,12 @@ import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-c
 import styles from './ingredient-item.module.css';
 import PropTypes from 'prop-types';
 import { ingredientPropType } from '../../utils/prop-types';
+import { useSelector } from 'react-redux';
 
 // описываю компонент ингредиента и передаю пропсы
 function IngredientItem({ item, count, onSelect }) {
+
+  const constructorIngredientsList = useSelector(store => store.constructorIngredientsList.constructorItems);
   const handleClick = () => onSelect(item);
   return (
     <li className={styles.listItem} onClick={handleClick}>

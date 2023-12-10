@@ -2,7 +2,8 @@ import {
   ADD_ITEM_CONSTRUCTOR,
   DELETE_ITEM_CONSTRUCTOR,
   ADD_UPDATE_MOVE_CONSTRUCTOR,
-  ADD_MOVE_BUN_CONSTRUCTOR
+  ADD_MOVE_BUN_CONSTRUCTOR,
+  CLEAR_CONSTRUCTOR
 } from './actions';
 
 const initialState = {
@@ -44,6 +45,11 @@ export const constructorReducer = (state = initialState, action) => {
       return {
         ...state,
         constructorItems: action.payload
+      }
+    case CLEAR_CONSTRUCTOR:
+      return {
+        constructorItems: [],
+        hasBun: false
       }
   };
 };

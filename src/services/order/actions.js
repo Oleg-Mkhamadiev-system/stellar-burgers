@@ -27,12 +27,12 @@ export const loadOrderError = (error) => {
 }
 
 // функция созданного заказа
-export function generateOrders () {
+export function generateOrders (ids) {
   return async function (dispatch) {
     dispatch(loadOrderRequest());
     try {
     const data = await getOrders({
-      ingredients: id.value
+      ingredients: ids.value
     });
         dispatch(loadOrderSuccess(data));
         dispatch(clearConstructor());

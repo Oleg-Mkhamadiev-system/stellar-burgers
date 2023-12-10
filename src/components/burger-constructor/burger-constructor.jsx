@@ -6,21 +6,31 @@ import { ingredientPropType } from '../../utils/prop-types';
 import PropTypes from 'prop-types';
 import OrderDetails from '../order-details/order-details';
 import Modal from '../modal/modal';
+import { useDispatch, useSelector } from 'react-redux';
+import { addBun, addIngredient, updateIngredient } from '../../services/constructorIngredients/actions';
+import ConstructorIngredient from '../constructor-ingredient/constructor-ingredient';
 
 function BurgerConstructor ({ ingredients }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const buns = useMemo(
-        () => ingredients.filter((item) => item.type === "bun"),
-        [ingredients]
-    );
+  const data = useSelector(store => store.constructorIngredientsList.constructorItems);
+  const dispatch = useDispatch();
+
+    const bun = useMemo(
+        () => {
+          return {
+            bun: ingredients.filter((item) => item.type === "bun"),
+          };
+        }, [ingredients]);
 
     const mains = useMemo(
-        () => ingredients.filter((item) => item.type !== "bun"),
-        [ingredients]
-    );
+        () => {
+          return {
+            mains: ingredients.filter((item) => item.type !== "bun"),
+          };
+        }, [ingredients]);
 
-    /* const priceItem = useMemo(
+    const totalPrice = useMemo(
       () => {
         return Array.from(data).reduce((acc, item) => {
           return item.price === "bun"
@@ -29,40 +39,55 @@ function BurgerConstructor ({ ingredients }) {
         }, 0)
       },
       [data]
-    ); */
+    );
+
+    const [{ isHover }, dropTarget] = useDrop({
+      accept: 'ingredient',
+      drop(item) {
+        item.type === "bun"
+        ? dispatch(addBun(item))
+        : dispatch(addIngredient(item));
+      },
+      collect: monitor => ({
+        isHover: monitor.isOver()
+      })
+    });
+
+    const moveItemIngredient = (dragIndex, hoverIndex) => {
+      const dragIngredient = data.mains[dragIndex];
+      const newIngredients = update(data,
+      newIngredients.splice(dragIndex, 1),
+      newIngredients.splice(hoverIndex, 0, dragIngredient)
+    );
+      dispatch(updateIngredient(newIngredients));
+    };
 
     return (
-        <div className={`${styles.burgerContainer} pt-25 pl-4 ml-10`}>
+        <div className={`${styles.burgerContainer} pt-25 pl-4 ml-10`} ref={dropTarget}>
             <section className="pl-8">
-                {buns.map((ingredient, index) => (
-                    <div className={`${styles.burgerComponents} ml-6 pr-2`} key={ingredient._id + index}>
+                {data.map((item, index) => {
+                  {bun && (
+                    <div className={`${styles.burgerComponents} ml-6 pr-2`} key={item._id + index}>
                       <ConstructorElement
                       extraClass="mt-4 mb-4"
-                      key={ingredient._id}
+                      key={item._id}
                       type="top"
                       isLocked={true}
-                      text={`${ingredient.name} (верх)`}
-                      price={ingredient.price}
-                      thumbnail={ingredient["image_mobile"]}
+                      text={`${item.name} (верх)`}
+                      price={item.price}
+                      thumbnail={item["image_mobile"]}
                       />
                     </div>
-                ))}
+                    )
+                  }})}
             </section>
             <section className={`custom-scroll ${styles.componentsContainer}`}>
                 <ul className={styles.componentsList}>
-                    {mains.map((ingredient, index) => (
-                        <li className={`${styles.componentsItem}`} key={ingredient._id + index}>
-                            <DragIcon type="primary" />
-                            <ConstructorElement
-                            extraClass="mb-4"
-                            key={ingredient._id}
-                            isLocked={false}
-                            text={`${ingredient.name}`}
-                            price={ingredient.price}
-                            thumbnail={ingredient["image_mobile"]}
-                            />
-                        </li>
-                    ))}
+                    {data.map((ingredient, index) => {
+                      {mains && (
+                        <ConstructorIngredient />
+                      )}
+                    })}
                 </ul>
             </section>
             <section className="pl-8">
@@ -80,7 +105,7 @@ function BurgerConstructor ({ ingredients }) {
                 ))}
             </section>
             <section className={`${styles.infoContainer} pt-10 pr-4`}>
-                <span className="text text_type_main-large pr-2">650</span>
+                <span className="text text_type_main-large pr-2">{totalPrice}</span>
                 <div className={`${styles.iconContainer} pr-10`}>
                   <CurrencyIcon type="primary" />
                 </div>
