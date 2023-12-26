@@ -3,14 +3,27 @@ import styles from './ingredient-item.module.css';
 import PropTypes from 'prop-types';
 import { ingredientPropType } from '../../utils/prop-types';
 import { useSelector } from 'react-redux';
+import { useMemo } from 'react';
+import { useDrag } from 'react-dnd';
 
 // описываю компонент ингредиента и передаю пропсы
 function IngredientItem({ item, count, onSelect }) {
 
   const constructorIngredientsList = useSelector(store => store.constructorIngredientsList.constructorItems);
+  const count = useMemo(() => {
+    return data.type === "bun"
+    ? constructorIngredientsList.filter(item => item._id === data._id).length * 2
+    : constructorIngredientsList.filter(item => item._id === data._id).length
+  }, [constructorIngredientsList, data._id, data.type]);
+
+  const [_, drag] = useDrag({
+    type: "ingredient",
+    item
+  });
+
   const handleClick = () => onSelect(item);
   return (
-    <li className={styles.listItem} onClick={handleClick}>
+    <li className={styles.listItem} ref={drag} onClick={handleClick}>
       {count && <Counter count={count} size="default"
       extraClass={"m-1"} />}
       <img className="pl-4 pr-4" src={`${item.image}`} alt={`${item.name}`} />

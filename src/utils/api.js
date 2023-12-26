@@ -55,5 +55,3 @@ export function getOrders (id) {
         })
     }).then((res) => checkStatusResponse(res))
 };
-
-export { getIngredients };

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { Tabs } from '../tabs/tabs';
 import styles from './burger-ingredients.module.css';
 import IngredientItem from '../ingredient-item/ingredient-item';
@@ -6,23 +6,46 @@ import PropTypes from 'prop-types';
 import { ingredientPropType } from '../../utils/prop-types';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import Modal from '../modal/modal';
+import { useSelector } from 'react-redux';
 
 function BurgerIngredients ({ ingredients }) {
   const [currentIngredient, setOpenCurrentIngredient] = useState(false);
-    const buns = useMemo(
-        () => ingredients.filter((item) => item.type === "bun"),
-        [ingredients]
-    );
 
-    const sauces = useMemo(
-        () => ingredients.filter((item) => item.type === "sauce"),
-        [ingredients]
-    );
+  //const ingredientsList = useSelector(store => store.ingredients.ingredients);
 
-    const mains = useMemo(
-        () => ingredients.filter((item) => item.type === "main"),
-        [ingredients]
-    );
+  const buns = useMemo(
+      () => ingredients.filter((item) => item.type === "bun"),
+      [ingredients]
+  );
+
+  const sauces = useMemo(
+      () => ingredients.filter((item) => item.type === "sauce"),
+      [ingredients]
+  );
+
+  const mains = useMemo(
+      () => ingredients.filter((item) => item.type === "main"),
+      [ingredients]
+  );
+
+  const bunsRef = useRef(null);
+  const saucesRef = useRef(null);
+  const mainsRef = useRef(null);
+
+  const scrollView = useCallback(tab => {
+      switch (tab) {
+          case "Булки":
+            bunsRef.current.scrollIntoView();
+            break;
+          case "Соусы":
+            saucesRef.current.scrollIntoView();
+            break;
+          case "Начинки":
+            mainsRef.current.scrollIntoView();
+          default:
+            throw new Error(`Ошибка прокрутки`);
+      }
+  })
 
     return (
         <section className={styles.container}>

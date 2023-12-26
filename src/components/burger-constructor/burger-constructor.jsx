@@ -8,7 +8,9 @@ import OrderDetails from '../order-details/order-details';
 import Modal from '../modal/modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { addBun, addIngredient, updateIngredient } from '../../services/constructorIngredients/actions';
-import ConstructorIngredient from '../constructor-ingredient/constructor-ingredient';
+import CurrentIngredient from '../current-ingredient/current-ingredient';
+import { v4 as uuid } from 'uuid';
+import { generateOrders } from '../../services/order/actions';
 
 function BurgerConstructor ({ ingredients }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -46,7 +48,7 @@ function BurgerConstructor ({ ingredients }) {
       drop(item) {
         item.type === "bun"
         ? dispatch(addBun(item))
-        : dispatch(addIngredient(item));
+        : dispatch(addIngredient({ ...item, id: uuid() }));
       },
       collect: monitor => ({
         isHover: monitor.isOver()
@@ -60,6 +62,12 @@ function BurgerConstructor ({ ingredients }) {
       newIngredients.splice(hoverIndex, 0, dragIngredient)
     );
       dispatch(updateIngredient(newIngredients));
+    };
+
+    const openOrderModal = (evt) => {
+      evt.preventDefault();
+      const ids = data.map((item) => item._id);
+      dispatch(generateOrders(ids));
     };
 
     return (
@@ -85,13 +93,20 @@ function BurgerConstructor ({ ingredients }) {
                 <ul className={styles.componentsList}>
                     {data.map((ingredient, index) => {
                       {mains && (
-                        <ConstructorIngredient />
+                        <li key={`${item.uuid}`}>
+                          <CurrentIngredient
+                          ingredient={ingredient}
+                          id={id}
+                          index={index}
+                          moveItemIngredient={moveItemIngredient}
+                          />
+                        </li>
                       )}
                     })}
                 </ul>
             </section>
             <section className="pl-8">
-                {buns.map((ingredient, index) => (
+                {bun.map((ingredient, index) => (
                     <div className={`${styles.burgerComponents} ml-6 pr-2`} key={ingredient._id + index}>
                        <ConstructorElement
                        key={ingredient._id}
@@ -112,7 +127,7 @@ function BurgerConstructor ({ ingredients }) {
                 <Button htmlType="button"
                 type="primary"
                 size="large"
-                onClick={() => setIsModalOpen(true)}>
+                onClick={() => openOrderModal(true)}>
                     Оформить заказ
                 </Button>
                 {isModalOpen &&
