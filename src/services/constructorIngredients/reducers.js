@@ -12,7 +12,7 @@ const initialState = {
 };
 
 export const constructorReducer = (state = initialState, action) => {
-  switch(type.action) {
+  switch(action.type) {
     case ADD_ITEM_CONSTRUCTOR: {
       return {
         ...state,
@@ -24,23 +24,26 @@ export const constructorReducer = (state = initialState, action) => {
         ? {
           ...state,
           constructorItems: state.constructorItems.map(item => {
-            item === 'bun'
+            return item.type === 'bun'
             ? action.payload
             : item
           })
         }
         : {
           ...state,
-          constructorItems: state.constructorItems, action: payload,
+          constructorItems: [state.constructorItems, action.payload],
           hasBun: true
         }
     case DELETE_ITEM_CONSTRUCTOR:
       return {
         ...state,
-        constructorItems: state.constructorItems.filter(item => {
-          item.uuid !== action.payload.uuid
-        })
-    }
+        constructorItems:
+          action.payload.type !== "bun"
+            ? [...state.constructorItems].filter(item => {
+                return item.uuid !== action.payload.uuid
+               })
+            : [...state.constructorItems]
+      }
     case ADD_UPDATE_MOVE_CONSTRUCTOR:
       return {
         ...state,
@@ -51,5 +54,7 @@ export const constructorReducer = (state = initialState, action) => {
         constructorItems: [],
         hasBun: false
       }
+      default:
+        return state;
   };
 };

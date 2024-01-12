@@ -27,10 +27,10 @@ export const updateIngredient = (data) => {
   };
 };
 
-export const deleteIngredient = (id) => {
+export const deleteIngredient = (data) => {
   return {
     type: DELETE_ITEM_CONSTRUCTOR,
-    payload: id
+    payload: data
   };
 };
 

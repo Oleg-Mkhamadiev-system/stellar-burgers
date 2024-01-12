@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import OrderDetails from '../order-details/order-details';
 import Modal from '../modal/modal';
 import { useDispatch, useSelector } from 'react-redux';
+import { useDrop } from 'react-dnd';
 import { addBun, addIngredient, updateIngredient } from '../../services/constructorIngredients/actions';
 import CurrentIngredient from '../current-ingredient/current-ingredient';
 import { v4 as uuid } from 'uuid';
@@ -56,11 +57,11 @@ function BurgerConstructor ({ ingredients }) {
     });
 
     const moveItemIngredient = (dragIndex, hoverIndex) => {
-      const dragIngredient = data.mains[dragIndex];
-      const newIngredients = update(data,
-      newIngredients.splice(dragIndex, 1),
-      newIngredients.splice(hoverIndex, 0, dragIngredient)
-    );
+      const dragIngredient = mains[dragIndex];
+      const newIngredients = [...mains];
+      newIngredients.splice(dragIndex, 1);
+      newIngredients.splice(hoverIndex, 0, dragIngredient);
+
       dispatch(updateIngredient(newIngredients));
     };
 
@@ -91,12 +92,12 @@ function BurgerConstructor ({ ingredients }) {
             </section>
             <section className={`custom-scroll ${styles.componentsContainer}`}>
                 <ul className={styles.componentsList}>
-                    {data.map((ingredient, index) => {
+                    {data.map((item, index) => {
                       {mains && (
                         <li key={`${item.uuid}`}>
                           <CurrentIngredient
-                          ingredient={ingredient}
-                          id={id}
+                          ingredient={item}
+                          key={item._id}
                           index={index}
                           moveItemIngredient={moveItemIngredient}
                           />
@@ -106,18 +107,20 @@ function BurgerConstructor ({ ingredients }) {
                 </ul>
             </section>
             <section className="pl-8">
-                {bun.map((ingredient, index) => (
-                    <div className={`${styles.burgerComponents} ml-6 pr-2`} key={ingredient._id + index}>
+                {data.map((item, index) => {
+                   {bun && (
+                    <div className={`${styles.burgerComponents} ml-6 pr-2`} key={item._id + index}>
                        <ConstructorElement
-                       key={ingredient._id}
+                       key={item._id}
                        type="bottom"
                        isLocked={true}
-                       text={`${ingredient.name} (низ)`}
-                       price={ingredient.price}
-                       thumbnail={ingredient["image_mobile"]}
+                       text={`${item.name} (низ)`}
+                       price={item.price}
+                       thumbnail={item["image_mobile"]}
                        />
                     </div>
-                ))}
+                    )}
+                  })}
             </section>
             <section className={`${styles.infoContainer} pt-10 pr-4`}>
                 <span className="text text_type_main-large pr-2">{totalPrice}</span>

@@ -16,11 +16,6 @@
     margin: 0px;
 }
 
-.componentsItem {
-    display: flex;
-    align-items: center;
-}
-
 .infoContainer {
     display: flex;
     justify-content: flex-end;

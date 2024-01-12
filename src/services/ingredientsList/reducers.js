@@ -11,8 +11,8 @@ const ingredientsArrState = {
   ingredients: []
 };
 
-export const ingredientListReducer = (state = ingredientsArrState, action) => {
-  switch (type.action) {
+export const ingredientsListReducer = (state = ingredientsArrState, action) => {
+  switch (action.type) {
     case GET_INGREDIENTS_REQUEST:
       return {
         ...state,

@@ -5,7 +5,7 @@ const currentIngredientState = {
 }
 
 export const currentIngredientReducer = (state = currentIngredientState, action) => {
-  switch(type.action) {
+  switch(action.type) {
     case SET_CURRENT_INGREDIENT:
       return {
         ...state,

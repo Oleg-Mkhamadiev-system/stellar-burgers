@@ -34,7 +34,7 @@ export const checkStatusResponse = (res) => {
 
 export function getIngredients (params={}) {
     return fetch(`${baseUrl}/ingredients`,
-    options = {
+    {
         method: "GET",
         headers: {
             ...params.headers
@@ -45,7 +45,7 @@ export function getIngredients (params={}) {
 
 export function getOrders (id) {
     return fetch(`${baseUrl}/orders`,
-    options = {
+    {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

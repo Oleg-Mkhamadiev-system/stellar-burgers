@@ -13,7 +13,7 @@ const orderState = {
 };
 
 export const orderReducer = (state = orderState, action) => {
-  switch(type.action) {
+  switch(action.type) {
     case LOAD_ORDER_REQUEST:
       return {
         ...state,
@@ -36,5 +36,7 @@ export const orderReducer = (state = orderState, action) => {
         orderError: true,
         errorMessage: action.payload
       }
+      default:
+        return state;
   }
 }

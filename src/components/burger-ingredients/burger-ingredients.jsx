@@ -10,8 +10,9 @@ import { useSelector } from 'react-redux';
 
 function BurgerIngredients ({ ingredients }) {
   const [currentIngredient, setOpenCurrentIngredient] = useState(false);
+  const [current, setCurrent] = useState("Булки");
 
-  const ingredients = useSelector(store => store.ingredients.ingredients);
+  const ingredientsList = useSelector(store => store.ingredientsList.ingredients);
 
   const buns = useMemo(
       () => ingredients.filter((item) => item.type === "bun"),
@@ -48,8 +49,8 @@ function BurgerIngredients ({ ingredients }) {
   });
 
   function count (item_Id, itemType) {
-    let count = ingredients.filter(item => {
-      item._id === item_Id
+    let count = ingredientsList.filter(item => {
+    return item._id === item_Id
     }).length;
 
     if (itemType === "bun") count *= 2;
@@ -81,7 +82,7 @@ function BurgerIngredients ({ ingredients }) {
     return (
         <section className={styles.container}>
             <h1 className="text text_type_main-large pt-10 pb-5">Соберите бургер</h1>
-            <Tabs scrollView={scrollView} current={currentIngredient} setCurrent={scrollView} />
+            <Tabs scrollView={scrollView} current={current} setCurrent={scrollView} />
             <div className={`custom-scroll pt-10 ${styles.ingredientsContainer}`}
              onScroll={handleScroll}>
                 <h2 ref={bunsRef} className="text text_type_main-medium">Булки</h2>

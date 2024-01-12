@@ -1,11 +1,15 @@
+import styles from './current-ingredient.module.css';
 import { useDrag, useDrop } from "react-dnd";
 import { ConstructorElement, DragIcon
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useRef } from "react";
 import { deleteIngredient } from "../../services/constructorIngredients/actions";
+import PropTypes from 'prop-types';
+import { useDispatch } from "react-redux";
 
-function CurrentIngredient ({ ingredient, id, index, moveItemIngredient }) {
+function CurrentIngredient ({ data, ingredient, id, index, moveItemIngredient }) {
   const ref = useRef(null);
+  const dispatch = useDispatch();
 
   const [{ isDrag }, dragRef] = useDrag({
     type: "ingredient",
