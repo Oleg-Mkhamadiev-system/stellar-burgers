@@ -43,6 +43,7 @@ function BurgerIngredients ({ ingredients }) {
             break;
           case "Начинки":
             mainsRef.current.scrollIntoView();
+            break;
           default:
             throw new Error(`Ошибка прокрутки`);
       }
