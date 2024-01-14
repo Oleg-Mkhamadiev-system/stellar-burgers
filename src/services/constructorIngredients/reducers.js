@@ -13,17 +13,16 @@ const initialState = {
 
 export const constructorReducer = (state = initialState, action) => {
   switch(action.type) {
-    case ADD_ITEM_CONSTRUCTOR: {
+    case ADD_ITEM_CONSTRUCTOR:
       return {
         ...state,
         constructorItems: [...state.constructorItems, action.payload]
       }
-    };
     case ADD_MOVE_BUN_CONSTRUCTOR:
       return state.hasBun
         ? {
           ...state,
-          constructorItems: state.constructorItems.map(item => {
+          constructorItems: [...state.constructorItems].map(item => {
             return item.type === 'bun'
             ? action.payload
             : item
@@ -31,7 +30,7 @@ export const constructorReducer = (state = initialState, action) => {
         }
         : {
           ...state,
-          constructorItems: [state.constructorItems, action.payload],
+          constructorItems: [...state.constructorItems, action.payload],
           hasBun: true
         }
     case DELETE_ITEM_CONSTRUCTOR:

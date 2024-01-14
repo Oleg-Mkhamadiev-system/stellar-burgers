@@ -1,4 +1,5 @@
 import styles from './current-ingredient.module.css';
+import React from 'react';
 import { useDrag, useDrop } from "react-dnd";
 import { ConstructorElement, DragIcon
 } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -7,7 +8,7 @@ import { deleteIngredient } from "../../services/constructorIngredients/actions"
 import PropTypes from 'prop-types';
 import { useDispatch } from "react-redux";
 
-function CurrentIngredient ({ data, ingredient, id, index, moveItemIngredient }) {
+function CurrentIngredient ({ item, id, index, moveItemIngredient }) {
   const ref = useRef(null);
   const dispatch = useDispatch();
 
@@ -21,11 +22,11 @@ function CurrentIngredient ({ data, ingredient, id, index, moveItemIngredient })
     }),
   });
 
-  const [{ itemId }, drop] = useDrop({
+  const [{ handlerId }, drop] = useDrop({
     accept: "component",
     collect(monitor) {
         return {
-          itemId: monitor.getItemId(),
+          handlerId: monitor.getHandlerId(),
         };
      },
      hover(item, monitor) {
@@ -59,29 +60,30 @@ function CurrentIngredient ({ data, ingredient, id, index, moveItemIngredient })
   dragRef(drop(ref));
 
   function deleteItem () {
-    dispatch(deleteIngredient(data));
+    dispatch(deleteIngredient(item));
   }
 
   return (
-    <li className={`${isDrag } ${styles.componentsItem}`}
-      key={ingredient._id + index} ref={dragRef} data-item-id={itemId} draggable id={id}>
-                            <DragIcon type="primary" />
-                            <ConstructorElement
-                            extraClass="mb-4"
-                            key={ingredient._id}
-                            isLocked={false}
-                            text={`${ingredient.name}`}
-                            price={ingredient.price}
-                            thumbnail={ingredient["image_mobile"]}
-                            handleClose={deleteItem}
-                            />
-                        </li>
-  );
-};
+    <li className={`${styles.componentsItem} ${isDrag && styles.containerDraggable}`}
+      ref={dragRef} data-handler-id={handlerId} id={id}>
+                      <DragIcon type="primary" />
+                      <ConstructorElement
+                        extraClass="mb-4"
+                        key={item._id}
+                        isLocked={false}
+                        text={`${item.name}`}
+                        price={item.price}
+                        thumbnail={item["image_mobile"]}
+                        handleClose={deleteItem}
+                      />
+      </li>
+    );
+  };
 
 CurrentIngredient.propTypes = {
-  ingredient: PropTypes.object,
+  item: PropTypes.object,
   moveItemIngredient: PropTypes.func,
+  id: PropTypes.string,
   index: PropTypes.number
 };
 

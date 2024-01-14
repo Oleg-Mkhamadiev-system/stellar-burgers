@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState, memo } from 'react';
 import { Tabs } from '../tabs/tabs';
 import styles from './burger-ingredients.module.css';
 import IngredientItem from '../ingredient-item/ingredient-item';
@@ -59,7 +59,7 @@ function BurgerIngredients ({ ingredients }) {
   };
 
   function renderIngredient (items) {
-    items.map(item => {
+    return items.map(item => {
       return (
               <IngredientItem
                 count={count(item._id, item.type)}
@@ -90,12 +90,12 @@ function BurgerIngredients ({ ingredients }) {
                 <ul className={`${styles.ingredientsList} pl-4 pt-6 pb-10 pr-2`}>
                     {renderIngredient(buns)}
                 </ul>
-                <h2 className="text text_type_main-medium">Соусы</h2>
-                <ul ref={saucesRef} className={`${styles.ingredientsList} pl-4 pt-6 pb-8 pr-2`}>
+                <h2 ref={saucesRef} className="text text_type_main-medium">Соусы</h2>
+                <ul className={`${styles.ingredientsList} pl-4 pt-6 pb-8 pr-2`}>
                     {renderIngredient(sauces)}
                 </ul>
-                <h2 className="text text_type_main-medium">Начинки</h2>
-                <ul ref={mainsRef} className={`${styles.ingredientsList} pl-4`}>
+                <h2 ref={mainsRef} className="text text_type_main-medium">Начинки</h2>
+                <ul className={`${styles.ingredientsList} pl-4`}>
                     {renderIngredient(mains)}
                 </ul>
                 {currentIngredient &&
@@ -112,4 +112,4 @@ BurgerIngredients.propTypes = {
     ingredients: PropTypes.arrayOf(ingredientPropType).isRequired,
 };
 
-export default BurgerIngredients;
+export default memo(BurgerIngredients);

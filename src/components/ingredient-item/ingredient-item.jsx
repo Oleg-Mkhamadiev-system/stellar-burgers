@@ -9,9 +9,9 @@ import { useDrag } from 'react-dnd';
 // описываю компонент ингредиента и передаю пропсы
 function IngredientItem({ item, count, onSelect }) {
 
-  const constructorIngredientsList = useSelector(
+  /* const constructorIngredientsList = useSelector(
     store => store.constructorIngredientsList.constructorItems
-    );
+    ); */
 
   /* const count = useMemo(() => {
     return data.type === "bun"

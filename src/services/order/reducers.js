@@ -27,7 +27,7 @@ export const orderReducer = (state = orderState, action) => {
         orderError: false,
         order: {
           name: action.payload.name,
-          order: action.payload.order.number
+          orderNumber: action.payload.order.number
         }
       }
     case LOAD_ORDER_ERROR:
@@ -36,6 +36,14 @@ export const orderReducer = (state = orderState, action) => {
         orderError: true,
         errorMessage: action.payload
       }
+      case LOAD_ORDER_DETAILS:
+        return {
+          ...state,
+          orderRequest: false,
+          orderError: false,
+          order: null,
+          errorMessage: ''
+        }
       default:
         return state;
   }
