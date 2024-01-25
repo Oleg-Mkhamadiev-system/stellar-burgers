@@ -1,5 +1,5 @@
 
-const baseUrl = "https://norma.nomoreparties.space/api";
+export const baseUrl = "https://norma.nomoreparties.space/api";
 
 export const checkStatusResponse = (res) => {
     if (res.ok) {

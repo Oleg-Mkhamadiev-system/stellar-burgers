@@ -7,22 +7,22 @@ export const GET_INGREDIENTS_ERROR = "GET_INGREDIENTS_ERROR";
 export const getIngredientsRequest = () => {
   return {
     type: GET_INGREDIENTS_REQUEST
-  }
-}
+  };
+};
 
 export const getIngredientsSuccess = (data) => {
   return {
     type: GET_INGREDIENTS_SUCCESS,
     payload: data
-  }
-}
+  };
+};
 
 export const getIngredientsError = (error) => {
   return {
     type: GET_INGREDIENTS_ERROR,
     payload: error
-  }
-}
+  };
+};
 
 export function getIngredients () {
   return async dispatch => {
@@ -33,5 +33,5 @@ export function getIngredients () {
     } catch (error) {
       dispatch(getIngredientsError(error));
     }
-  }
+  };
 }

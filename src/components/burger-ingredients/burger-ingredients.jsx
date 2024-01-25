@@ -46,7 +46,7 @@ function BurgerIngredients () {
           default:
             throw new Error(`Ошибка прокрутки`);
       }
-  });
+  }, []);
 
   function count (item_Id, itemType) {
     let count = ingredients.filter(item => {
