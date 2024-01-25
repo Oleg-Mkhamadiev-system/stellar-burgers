@@ -1,4 +1,4 @@
-import { getOrders } from '../../utils/api';
+import { apiRequest, getOrders } from '../../utils/api';
 import { clearConstructor } from '../constructorIngredients/actions';
 
 export const LOAD_ORDER_REQUEST = "LOAD_ORDER_REQUEST";
@@ -31,9 +31,7 @@ export function generateOrders (ids) {
   return async function (dispatch) {
     dispatch(loadOrderRequest());
     try {
-    const data = await getOrders({
-      ingredients: ids.value
-    });
+    const data = await apiRequest("/orders", getOrders(ids))
         dispatch(loadOrderSuccess(data));
         dispatch(clearConstructor());
       } catch (error) {

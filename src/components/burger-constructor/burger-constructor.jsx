@@ -1,9 +1,7 @@
 import styles from './burger-constructor.module.css';
 import { ConstructorElement, CurrencyIcon, Button
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useMemo } from 'react';
-import { ingredientPropType } from '../../utils/prop-types';
-import PropTypes from 'prop-types';
+import { useMemo, useState, memo } from 'react';
 import OrderDetails from '../order-details/order-details';
 import Modal from '../modal/modal';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,17 +11,17 @@ import CurrentIngredient from '../current-ingredient/current-ingredient';
 import { generateOrders } from '../../services/order/actions';
 import { v4 as uuid } from 'uuid';
 
-function BurgerConstructor ({ ingredients }) {
-  //const [isModalOpen, setIsModalOpen] = useState(false);
+function BurgerConstructor () {
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const data = useSelector(store => store.constructorIngredientsList.constructorItems);
-  const isOrder = useSelector(store => store.order.orderRequest);
+  const ingredients = useSelector(store => store.constructorIngredientsList.constructorItems);
+  const dataOrder = useSelector(store => store.orderData.order);
   const dispatch = useDispatch();
 
     const bun = useMemo(
         () => {
           return {
-            bun: ingredients.filter((item) => item.type === "bun"),
+            bun: ingredients.find((item) => item.type === "bun"),
           };
         }, [ingredients]);
 
@@ -36,13 +34,13 @@ function BurgerConstructor ({ ingredients }) {
 
     const totalPrice = useMemo(
       () => {
-        return Array.from(data).reduce((acc, item) => {
+        return Array.from(ingredients).reduce((acc, item) => {
           return item.price === "bun"
           ? acc + item.price * 2
           : acc + item.price;
         }, 0)
       },
-      [data]
+      [ingredients]
     );
 
     const [{ isOver }, dropTarget] = useDrop({
@@ -63,62 +61,61 @@ function BurgerConstructor ({ ingredients }) {
       newIngredients.splice(dragIndex, 1);
       newIngredients.splice(hoverIndex, 0, dragIngredient);
 
-      dispatch(updateIngredient(newIngredients));
+      dispatch(updateIngredient(bun ? [bun, ...newIngredients] : [...newIngredients]));
     };
 
-    const openOrderModal = () => {
-      const ids = data.map((item) => [item._id]);
+    const openOrderModal = (evt) => {
+      evt.preventDefault();
+      setIsModalOpen(true);
+      const itemList = [bun, ...mains, bun];
+      const ids = itemList.map((item) => [item._id]);
       dispatch(generateOrders(ids));
     };
 
     return (
         <div className={`${styles.burgerContainer} ${isOver && styles.container_isOver} pt-25 pl-4 ml-10`} ref={dropTarget}>
             <section className="pl-8">
-                {data.map((item) => {
-                  return bun && (
-                    <div className={`${styles.burgerComponents} ml-6 pr-2`} key={item._id}>
+              <div className={`${styles.burgerComponents} ml-6 pr-2`}>
+                {bun && (
                       <ConstructorElement
                        extraClass="mt-4 mb-4"
+                       key={bun.id}
                        type="top"
                        isLocked={true}
-                       text={`${item.name} (верх)`}
-                       price={item.price}
-                       thumbnail={item["image_mobile"]}
+                       text={`${bun.name} (верх)`}
+                       price={bun.price}
+                       thumbnail={bun["image_mobile"]}
                       />
-                    </div>
-                    )
-                  })}
+                  )}
+                </div>
             </section>
             <section className={`custom-scroll ${styles.componentsContainer}`}>
                 <ul className={styles.componentsList}>
-                    {data.map((item, index) => {
+                    {ingredients.map((item, index) => {
                       return mains && (
-                          <li key={`${item.uuid}`}>
-                          <CurrentIngredient
+                          <li key={`${item.id}`}>
+                            <CurrentIngredient
                            item={item}
-                           id={item._id}
                            index={index}
                            moveItemIngredient={moveItemIngredient}
                           />
                           </li>
-                      )
-                    })}
+                          )})}
                 </ul>
             </section>
             <section className="pl-8">
-                {data.map((item) => {
-                  return bun && (
-                    <div className={`${styles.burgerComponents} ml-6 pr-2`} key={item._id}>
+              <div className={`${styles.burgerComponents} ml-6 pr-2`}>
+                {bun && (
                        <ConstructorElement
+                        key={bun.id}
                         type="bottom"
                         isLocked={true}
-                        text={`${item.name} (низ)`}
-                        price={item.price}
-                        thumbnail={item["image_mobile"]}
+                        text={`${bun.name} (низ)`}
+                        price={bun.price}
+                        thumbnail={bun["image_mobile"]}
                        />
-                    </div>
-                    )}
                   )}
+                </div>
             </section>
             <section className={`${styles.infoContainer} pt-10 pr-4`}>
                 <span className="text text_type_main-large pr-2">{totalPrice}</span>
@@ -128,20 +125,16 @@ function BurgerConstructor ({ ingredients }) {
                 <Button htmlType="button"
                 type="primary"
                 size="large"
-                onClick={openOrderModal}>
+                onClick={(evt) => openOrderModal(evt)}>
                     Оформить заказ
                 </Button>
-                {isOrder &&
-                <Modal>
-                  <OrderDetails />
+                {isModalOpen &&
+                <Modal onClose={() => setIsModalOpen(false)}>
+                  <OrderDetails orderNumber={dataOrder.number}/>
                 </Modal>}
             </section>
         </div>
     );
 }
 
-BurgerConstructor.propTypes = {
-    ingredients: PropTypes.arrayOf(ingredientPropType).isRequired,
-};
-
-export default BurgerConstructor;
+export default memo(BurgerConstructor);

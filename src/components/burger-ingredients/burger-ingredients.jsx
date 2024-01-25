@@ -2,17 +2,16 @@ import { useCallback, useMemo, useRef, useState, memo } from 'react';
 import { Tabs } from '../tabs/tabs';
 import styles from './burger-ingredients.module.css';
 import IngredientItem from '../ingredient-item/ingredient-item';
-import PropTypes from 'prop-types';
-import { ingredientPropType } from '../../utils/prop-types';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import Modal from '../modal/modal';
 import { useSelector } from 'react-redux';
 
-function BurgerIngredients ({ ingredients }) {
+function BurgerIngredients () {
   const [currentIngredient, setOpenCurrentIngredient] = useState(false);
   const [current, setCurrent] = useState("Булки");
 
-  const ingredientsList = useSelector(store => store.ingredientsList.ingredients);
+  // достаю из стора ингредиенты
+  const ingredients = useSelector(store => store.ingredientsList.ingredients);
 
   const buns = useMemo(
       () => ingredients.filter((item) => item.type === "bun"),
@@ -50,7 +49,7 @@ function BurgerIngredients ({ ingredients }) {
   });
 
   function count (item_Id, itemType) {
-    let count = ingredientsList.filter(item => {
+    let count = ingredients.filter(item => {
     return item._id === item_Id
     }).length;
 
@@ -106,10 +105,6 @@ function BurgerIngredients ({ ingredients }) {
             </div>
         </section>
     );
-};
-
-BurgerIngredients.propTypes = {
-    ingredients: PropTypes.arrayOf(ingredientPropType).isRequired,
 };
 
 export default memo(BurgerIngredients);

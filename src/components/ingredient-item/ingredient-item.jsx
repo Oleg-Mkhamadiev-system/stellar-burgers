@@ -19,14 +19,17 @@ function IngredientItem({ item, count, onSelect }) {
     : constructorIngredientsList.filter(item => item._id === data._id).length
   }, [constructorIngredientsList, data._id, data.type]); */
 
-  const [_, drag] = useDrag({
+  const [{ isDrag }, drag] = useDrag({
     type: "ingredient",
-    item
+    item: { ...item, uuid: Date.now() },
+    collect: (monitor) => ({
+      isDrag: monitor.isDragging()
+    })
   });
 
   const handleClick = () => onSelect(item);
   return (
-    <li className={styles.listItem} ref={drag} onClick={handleClick}>
+    <li className={`${styles.listItem} ${isDrag}`} ref={drag} onClick={handleClick}>
       {count &&
         <Counter count={count} size="default" extraClass={"m-1"} />}
       <img className="pl-4 pr-4" src={`${item.image}`} alt={`${item.name}`} />

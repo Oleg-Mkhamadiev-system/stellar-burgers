@@ -1,7 +1,9 @@
+import { useSelector } from 'react-redux';
 import { ingredientPropType } from '../../utils/prop-types';
 import styles from './ingredient-details.module.css';
 
 function IngredientDetails ({ ingredient }) {
+  //const detailsIngredient = useSelector(store => store.currentIngredient.currentIngredient);
     return (
         <section className={`${styles.detailsContainer} pt-10 pr-10 pl-10 pb-15`}>
             <div className={`${styles.title}`}>

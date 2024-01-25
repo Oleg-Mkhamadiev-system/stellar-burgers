@@ -27,7 +27,7 @@ export const orderReducer = (state = orderState, action) => {
         orderError: false,
         order: {
           name: action.payload.name,
-          orderNumber: action.payload.order.number
+          order: action.payload.order.number
         }
       }
     case LOAD_ORDER_ERROR:
