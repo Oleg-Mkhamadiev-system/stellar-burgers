@@ -7,17 +7,17 @@ import { useMemo } from 'react';
 import { useDrag } from 'react-dnd';
 
 // описываю компонент ингредиента и передаю пропсы
-function IngredientItem({ item, count, onSelect }) {
+function IngredientItem({ item, onSelect }) {
 
-  /* const constructorIngredientsList = useSelector(
+  const dataIngredients = useSelector(
     store => store.constructorIngredientsList.constructorItems
-    ); */
+    );
 
-  /* const count = useMemo(() => {
-    return data.type === "bun"
-    ? constructorIngredientsList.filter(item => item._id === data._id).length * 2
-    : constructorIngredientsList.filter(item => item._id === data._id).length
-  }, [constructorIngredientsList, data._id, data.type]); */
+  const count = useMemo(() => {
+    return item.type === "bun"
+    ? dataIngredients.filter(item => item._id === item._id).length * 2
+    : dataIngredients.filter(item => item._id === item._id).length
+  }, [dataIngredients, item._id, item.type]);
 
   const [{ isDrag }, drag] = useDrag({
     type: "ingredient",

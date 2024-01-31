@@ -8,7 +8,7 @@ import {
 
 const initialState = {
   constructorItems: [],
-  hasBun: false
+  bun: null
 };
 
 export const constructorReducer = (state = initialState, action) => {
@@ -19,19 +19,9 @@ export const constructorReducer = (state = initialState, action) => {
         constructorItems: [...state.constructorItems, action.payload]
       }
     case ADD_MOVE_BUN_CONSTRUCTOR:
-      return state.hasBun
-        ? {
+      return {
           ...state,
-          constructorItems: [...state.constructorItems].map(item => {
-            return item.type === 'bun'
-            ? action.payload
-            : item
-          })
-        }
-        : {
-          ...state,
-          constructorItems: [...state.constructorItems, action.payload],
-          hasBun: true
+          bun: action.payload
         }
     case DELETE_ITEM_CONSTRUCTOR:
       return {
@@ -51,7 +41,7 @@ export const constructorReducer = (state = initialState, action) => {
     case CLEAR_CONSTRUCTOR:
       return {
         constructorItems: [],
-        hasBun: false
+        bun: null
       }
       default:
         return state;

@@ -1,46 +1,30 @@
 import styles from './burger-constructor.module.css';
 import { ConstructorElement, CurrencyIcon, Button
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useMemo, useState, memo } from 'react';
+import { useMemo, memo } from 'react';
 import OrderDetails from '../order-details/order-details';
 import Modal from '../modal/modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { useDrop } from 'react-dnd';
 import { addBun, addIngredient, updateIngredient } from '../../services/constructorIngredients/actions';
 import CurrentIngredient from '../current-ingredient/current-ingredient';
-import { generateOrders } from '../../services/order/actions';
+import { clearOrderDetails, generateOrders } from '../../services/order/actions';
 import { v4 as uuid } from 'uuid';
 
 function BurgerConstructor () {
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const ingredients = useSelector(store => store.constructorIngredientsList.constructorItems);
-  const dataOrder = useSelector(store => store.orderData.order);
+  const bun = useSelector(store => store.constructorIngredientsList.bun);
+  const number = useSelector(store => store.orderData.order?.number);
   const dispatch = useDispatch();
-
-    const bun = useMemo(
-        () => {
-          return {
-            bun: ingredients.find((item) => item.type === "bun"),
-          };
-        }, [ingredients]);
-
-    const mains = useMemo(
-        () => {
-          return {
-            mains: ingredients.filter((item) => item.type !== "bun"),
-          };
-        }, [ingredients]);
 
     const totalPrice = useMemo(
       () => {
-        return Array.from(ingredients).reduce((acc, item) => {
-          return item.price === "bun"
-          ? acc + item.price * 2
-          : acc + item.price;
-        }, 0)
+        let price = ingredients.reduce((acc, item) => acc + item.price, 0);
+
+        return price + 2 * (bun?.price ?? 0)
       },
-      [ingredients]
+      [ingredients, bun]
     );
 
     const [{ isOver }, dropTarget] = useDrop({
@@ -56,21 +40,28 @@ function BurgerConstructor () {
     });
 
     const moveItemIngredient = (dragIndex, hoverIndex) => {
-      const dragIngredient = mains[dragIndex];
-      const newIngredients = [...mains];
+      const dragIngredient = ingredients[dragIndex];
+      const newIngredients = [...ingredients];
       newIngredients.splice(dragIndex, 1);
       newIngredients.splice(hoverIndex, 0, dragIngredient);
 
-      dispatch(updateIngredient(bun ? [bun, ...newIngredients] : [...newIngredients]));
+      dispatch(updateIngredient(newIngredients));
     };
 
     const openOrderModal = (evt) => {
       evt.preventDefault();
-      setIsModalOpen(true);
-      const itemList = [bun, ...mains, bun];
+      const itemList = [bun, ...ingredients, bun];
       const ids = itemList.map((item) => [item._id]);
       dispatch(generateOrders(ids));
     };
+
+    const closeOrderModal = () => {
+      dispatch(clearOrderDetails());
+    };
+
+    console.log("bun", bun);
+    console.log("ingredients", ingredients);
+    console.log("total", totalPrice);
 
     return (
         <div className={`${styles.burgerContainer} ${isOver && styles.container_isOver} pt-25 pl-4 ml-10`} ref={dropTarget}>
@@ -92,7 +83,7 @@ function BurgerConstructor () {
             <section className={`custom-scroll ${styles.componentsContainer}`}>
                 <ul className={styles.componentsList}>
                     {ingredients.map((item, index) => {
-                      return mains && (
+                      return ingredients && (
                           <li key={`${item.id}`}>
                             <CurrentIngredient
                            item={item}
@@ -128,9 +119,9 @@ function BurgerConstructor () {
                 onClick={(evt) => openOrderModal(evt)}>
                     Оформить заказ
                 </Button>
-                {isModalOpen &&
-                <Modal onClose={() => setIsModalOpen(false)}>
-                  <OrderDetails orderNumber={dataOrder.number}/>
+                {number &&
+                <Modal onClose={() => closeOrderModal()}>
+                  <OrderDetails orderNumber={number} />
                 </Modal>}
             </section>
         </div>

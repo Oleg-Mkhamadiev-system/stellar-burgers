@@ -1,6 +1,6 @@
 import {
   LOAD_ORDER_REQUEST,
-  LOAD_ORDER_DETAILS,
+  CLEAR_ORDER_DETAILS,
   LOAD_ORDER_SUCCESS,
   LOAD_ORDER_ERROR
 } from './actions';
@@ -27,7 +27,7 @@ export const orderReducer = (state = orderState, action) => {
         orderError: false,
         order: {
           name: action.payload.name,
-          order: action.payload.order.number
+          number: action.payload.order.number
         }
       }
     case LOAD_ORDER_ERROR:
@@ -36,7 +36,7 @@ export const orderReducer = (state = orderState, action) => {
         orderError: true,
         errorMessage: action.payload
       }
-      case LOAD_ORDER_DETAILS:
+      case CLEAR_ORDER_DETAILS:
         return {
           ...state,
           orderRequest: false,
