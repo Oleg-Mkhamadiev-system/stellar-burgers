@@ -10,7 +10,7 @@ export const setCurrentIngredient = (data) => {
   };
 };
 
-export const clearCurrentDetails = () => {
+export const clearCurrentIngredient = () => {
   return {
     type: CLEAR_CURRENT_INGREDIENT
   };

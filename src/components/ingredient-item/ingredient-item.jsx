@@ -7,29 +7,56 @@ import { useMemo } from 'react';
 import { useDrag } from 'react-dnd';
 
 // описываю компонент ингредиента и передаю пропсы
-function IngredientItem({ item, onSelect }) {
+function IngredientItem({ item, count, onSelect }) {
 
-  const dataIngredients = useSelector(
+  /* const dataIngredients = useSelector(
     store => store.constructorIngredientsList.constructorItems
-    );
+    ); */
 
-  const count = useMemo(() => {
+  //const bun = useSelector(store => store.constructorIngredientsList.bun);
+
+  /* const count = useMemo(() => {
     return item.type === "bun"
     ? dataIngredients.filter(item => item._id === item._id).length * 2
     : dataIngredients.filter(item => item._id === item._id).length
-  }, [dataIngredients, item._id, item.type]);
+  }, [dataIngredients, item._id, item.type]); */
 
-  const [{ isDrag }, drag] = useDrag({
+  /* const count = (item_Id, itemType) => {
+    let count = dataIngredients.filter(
+        (item) => item._id === item_Id
+    ).length;
+    if (itemType === "bun") count *= 2;
+    return count;
+}; */
+
+/* const count = useMemo(() => {
+  let count = dataIngredients.filter((item) => {
+    if (itemType !== "bun") {
+      count[item._id] = 0;
+      count[item._id]++;
+    };
+  if (itemType === "bun") {
+    count *= 2;
+  }
+  return count;
+});
+}, []); */
+  /* const [{ isDrag }, drag] = useDrag({
     type: "ingredient",
     item: { ...item, uuid: Date.now() },
     collect: (monitor) => ({
       isDrag: monitor.isDragging()
     })
-  });
+  }); */
+
+  const [_, drag] = useDrag({
+    type: "ingredient",
+    item,
+});
 
   const handleClick = () => onSelect(item);
   return (
-    <li className={`${styles.listItem} ${isDrag}`} ref={drag} onClick={handleClick}>
+    <li className={`${styles.listItem}`} ref={drag} onClick={handleClick}>
       {count &&
         <Counter count={count} size="default" extraClass={"m-1"} />}
       <img className="pl-4 pr-4" src={`${item.image}`} alt={`${item.name}`} />
@@ -41,6 +68,20 @@ function IngredientItem({ item, onSelect }) {
     </li>
   );
 };
+
+/* const count = useMemo(() => {
+  if (bun) {
+    count[bun._id] = 2;
+  }
+  ingredients.find(item => {
+    if (!count[item._id]) {
+      count = 0;
+    } else {
+      count[item._id]++;
+    }
+  });
+  return count;
+}, [bun, ingredients]); */
 
 IngredientItem.propTypes = {
     item: ingredientPropType,

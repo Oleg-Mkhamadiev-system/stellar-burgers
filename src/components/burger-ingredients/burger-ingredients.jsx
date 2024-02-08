@@ -4,11 +4,14 @@ import styles from './burger-ingredients.module.css';
 import IngredientItem from '../ingredient-item/ingredient-item';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import Modal from '../modal/modal';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearCurrentIngredient, setCurrentIngredient } from '../../services/currentIngredient/actions';
 
 function BurgerIngredients () {
-  const [currentIngredient, setOpenCurrentIngredient] = useState(false);
   const [current, setCurrent] = useState("Булки");
+  const dispatch = useDispatch();
+
+  const currentIngredient = useSelector(store => store.currentIngredient.currentIngredient);
 
   // достаю из стора ингредиенты
   const ingredients = useSelector(store => store.ingredientsList.ingredients);
@@ -57,15 +60,25 @@ function BurgerIngredients () {
     return count;
   };
 
+  function openModalIngredient (item) {
+    dispatch(setCurrentIngredient(item));
+  };
+
+  function closeModalIngredient () {
+    dispatch(clearCurrentIngredient());
+  };
+
   function renderIngredient (items) {
-    return items.map(item => {
+    return items?.map((item) => {
       return (
-              <IngredientItem
-                count={count(item._id, item.type)}
+
+                <IngredientItem
+                count={count(item?._id, item?.type) || null}
                 item={item}
-                key={item._id}
-                onSelect={setOpenCurrentIngredient}
+                key={item.id}
+                onSelect={() => openModalIngredient(item)}
               />
+
             )
     });
   };
@@ -98,7 +111,7 @@ function BurgerIngredients () {
                     {renderIngredient(mains)}
                 </ul>
                 {currentIngredient &&
-              <Modal  onClose={() => setOpenCurrentIngredient(null)}>
+              <Modal  onClose={() => closeModalIngredient()}>
                 <IngredientDetails ingredient={currentIngredient} />
               </Modal>
             }
