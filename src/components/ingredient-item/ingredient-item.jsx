@@ -15,11 +15,6 @@ function IngredientItem({ item, count, onSelect }) {
     })
   });
 
-  /* const [, drag] = useDrag({
-    type: "ingredient",
-    item,
-  }); */
-
   const handleClick = () => onSelect(item);
   return (
     <div className={`${styles.listItem} ${isDrag}`} ref={drag}

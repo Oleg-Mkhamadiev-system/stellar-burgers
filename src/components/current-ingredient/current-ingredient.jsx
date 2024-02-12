@@ -13,7 +13,7 @@ function CurrentIngredient ({ item, id, index, moveItemIngredient }) {
   const dispatch = useDispatch();
 
   const [{ handlerId }, drop] = useDrop({
-    accept: "ingredient",
+    accept: "moveIngredient",
     collect(monitor) {
         return {
           handlerId: monitor.getHandlerId(),
@@ -48,7 +48,7 @@ function CurrentIngredient ({ item, id, index, moveItemIngredient }) {
   });
 
   const [{ isDragging }, drag] = useDrag({
-    type: "ingredient",
+    type: "moveIngredient",
     item: () => {
         return { id, index };
     },
