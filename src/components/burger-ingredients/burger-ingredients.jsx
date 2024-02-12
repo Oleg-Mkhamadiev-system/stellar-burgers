@@ -1,68 +1,124 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState, memo } from 'react';
 import { Tabs } from '../tabs/tabs';
 import styles from './burger-ingredients.module.css';
 import IngredientItem from '../ingredient-item/ingredient-item';
-import PropTypes from 'prop-types';
-import { ingredientPropType } from '../../utils/prop-types';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import Modal from '../modal/modal';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearCurrentIngredient, setCurrentIngredient } from '../../services/currentIngredient/actions';
 
-function BurgerIngredients ({ ingredients }) {
-  const [currentIngredient, setOpenCurrentIngredient] = useState(false);
-    const buns = useMemo(
-        () => ingredients.filter((item) => item.type === "bun"),
-        [ingredients]
-    );
+function BurgerIngredients () {
+  const [current, setCurrent] = useState("Булки");
+  const dispatch = useDispatch();
 
-    const sauces = useMemo(
-        () => ingredients.filter((item) => item.type === "sauce"),
-        [ingredients]
-    );
+  const currentIngredient = useSelector(store => store.currentIngredient.currentIngredient);
 
-    const mains = useMemo(
-        () => ingredients.filter((item) => item.type === "main"),
-        [ingredients]
-    );
+  // достаю из стора ингредиенты
+  const ingredients = useSelector(store => store.ingredientsList.ingredients);
+
+  const constructorIngredients = useSelector(store => store.constructorIngredientsList.constructorItems);
+  const constructorBun = useSelector(store => store.constructorIngredientsList.bun);
+
+  const buns = useMemo(
+      () => ingredients?.filter((item) => item.type === "bun"),
+      [ingredients]
+  );
+
+  const sauces = useMemo(
+      () => ingredients?.filter((item) => item.type === "sauce"),
+      [ingredients]
+  );
+
+  const mains = useMemo(
+      () => ingredients?.filter((item) => item.type === "main"),
+      [ingredients]
+  );
+
+  const bunsRef = useRef(null);
+  const saucesRef = useRef(null);
+  const mainsRef = useRef(null);
+
+  const scrollView = useCallback(tab => {
+      switch (tab) {
+          case "Булки":
+            bunsRef.current.scrollIntoView();
+            break;
+          case "Соусы":
+            saucesRef.current.scrollIntoView();
+            break;
+          case "Начинки":
+            mainsRef.current.scrollIntoView();
+            break;
+          default:
+            throw new Error(`Ошибка прокрутки`);
+      }
+  }, []);
+
+  const counts = useMemo(() => {
+    console.log("test");
+    const stat = constructorIngredients.reduce((stat, item) => {
+        stat[item._id] = (stat[item._id] ?? 0) + 1;
+        return stat;
+    }, {});
+
+    if (constructorBun) {
+      stat[constructorBun._id] = 2
+    }
+
+    return stat;
+  }, [constructorIngredients, constructorBun]);
+
+  function openModalIngredient (item) {
+    dispatch(setCurrentIngredient(item));
+  };
+
+  function closeModalIngredient () {
+    dispatch(clearCurrentIngredient());
+  };
+
+  function renderIngredient (items) {
+    return items?.map((item) => {
+      return (
+                <li key={item._id}>
+                  <IngredientItem
+                  count={counts[item._id] ?? 0}
+                  item={item}
+                  onSelect={() => openModalIngredient(item)}
+                />
+              </li>
+            )
+    });
+  };
+
+  function handleScroll (evt) {
+    [bunsRef, saucesRef, mainsRef].forEach(section => {
+      const topSection = section.current.offsetTop;
+      if (evt.target.scrollTop >= topSection - 350) {
+        setCurrent(section.current.textContent);
+      }
+    })
+  };
 
     return (
         <section className={styles.container}>
             <h1 className="text text_type_main-large pt-10 pb-5">Соберите бургер</h1>
-            <Tabs />
-            <div className={`custom-scroll pt-10 ${styles.ingredientsContainer}`}>
-                <h2 className="text text_type_main-medium">Булки</h2>
+            <Tabs scrollView={scrollView} current={current} setCurrent={scrollView} />
+            <div className={`custom-scroll pt-10 ${styles.ingredientsContainer}`}
+             onScroll={handleScroll}>
+                <h2 ref={bunsRef} className="text text_type_main-medium">Булки</h2>
                 <ul className={`${styles.ingredientsList} pl-4 pt-6 pb-10 pr-2`}>
-                    {buns.map((item) => (
-                        <IngredientItem
-                        count={1}
-                        item={item}
-                        key={item._id}
-                        onSelect={setOpenCurrentIngredient}
-                        />
-                    ))}
+                    {renderIngredient(buns)}
                 </ul>
-                <h2 className="text text_type_main-medium">Соусы</h2>
+                <h2 ref={saucesRef} className="text text_type_main-medium">Соусы</h2>
                 <ul className={`${styles.ingredientsList} pl-4 pt-6 pb-8 pr-2`}>
-                    {sauces.map((item) => (
-                        <IngredientItem
-                        count={1}
-                        item={item}
-                        key={item._id}
-                        onSelect={setOpenCurrentIngredient}
-                        />
-                    ))}
+                    {renderIngredient(sauces)}
                 </ul>
-                <h2 className="text text_type_main-medium">Начинки</h2>
+                <h2 ref={mainsRef} className="text text_type_main-medium">Начинки</h2>
                 <ul className={`${styles.ingredientsList} pl-4`}>
-                    {mains.map((item) => (
-                        <IngredientItem
-                        item={item}
-                        key={item._id}
-                        onSelect={setOpenCurrentIngredient}
-                        />
-                    ))}
+                    {renderIngredient(mains)}
                 </ul>
                 {currentIngredient &&
-              <Modal  onClose={() => setOpenCurrentIngredient(null)}>
+              <Modal  onClose={() => closeModalIngredient()}>
                 <IngredientDetails ingredient={currentIngredient} />
               </Modal>
             }
@@ -71,8 +127,4 @@ function BurgerIngredients ({ ingredients }) {
     );
 };
 
-BurgerIngredients.propTypes = {
-    ingredients: PropTypes.arrayOf(ingredientPropType).isRequired,
-};
-
-export default BurgerIngredients;
+export default memo(BurgerIngredients);
