@@ -86,10 +86,11 @@ function BurgerConstructor () {
                       return ingredients && (
                           <li key={`${item.id}`}>
                             <CurrentIngredient
-                           item={item}
-                           index={index}
-                           moveItemIngredient={moveItemIngredient}
-                          />
+                            item={item}
+                            id={item._id}
+                            index={index}
+                            moveItemIngredient={moveItemIngredient}
+                            />
                           </li>
                           )})}
                 </ul>

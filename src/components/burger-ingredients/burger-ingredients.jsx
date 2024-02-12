@@ -16,18 +16,21 @@ function BurgerIngredients () {
   // достаю из стора ингредиенты
   const ingredients = useSelector(store => store.ingredientsList.ingredients);
 
+  const constructorIngredients = useSelector(store => store.constructorIngredientsList.constructorItems);
+  const constructorBun = useSelector(store => store.constructorIngredientsList.bun);
+
   const buns = useMemo(
-      () => ingredients.filter((item) => item.type === "bun"),
+      () => ingredients?.filter((item) => item.type === "bun"),
       [ingredients]
   );
 
   const sauces = useMemo(
-      () => ingredients.filter((item) => item.type === "sauce"),
+      () => ingredients?.filter((item) => item.type === "sauce"),
       [ingredients]
   );
 
   const mains = useMemo(
-      () => ingredients.filter((item) => item.type === "main"),
+      () => ingredients?.filter((item) => item.type === "main"),
       [ingredients]
   );
 
@@ -51,14 +54,19 @@ function BurgerIngredients () {
       }
   }, []);
 
-  function count (item_Id, itemType) {
-    let count = ingredients.filter(item => {
-    return item._id === item_Id
-    }).length;
+  const counts = useMemo(() => {
+    console.log("test");
+    const stat = constructorIngredients.reduce((stat, item) => {
+        stat[item._id] = (stat[item._id] ?? 0) + 1;
+        return stat;
+    }, {});
 
-    if (itemType === "bun") count *= 2;
-    return count;
-  };
+    if (constructorBun) {
+      stat[constructorBun._id] = 2
+    }
+
+    return stat;
+  }, [constructorIngredients, constructorBun]);
 
   function openModalIngredient (item) {
     dispatch(setCurrentIngredient(item));
@@ -71,14 +79,13 @@ function BurgerIngredients () {
   function renderIngredient (items) {
     return items?.map((item) => {
       return (
-
-                <IngredientItem
-                count={count(item?._id, item?.type) || null}
-                item={item}
-                key={item.id}
-                onSelect={() => openModalIngredient(item)}
-              />
-
+                <li key={item._id}>
+                  <IngredientItem
+                  count={counts[item._id] ?? 0}
+                  item={item}
+                  onSelect={() => openModalIngredient(item)}
+                />
+              </li>
             )
     });
   };

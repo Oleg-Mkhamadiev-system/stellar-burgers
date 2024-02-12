@@ -1,8 +1,10 @@
 .componentsItem {
   display: flex;
   align-items: center;
+  opacity: 1;
 }
 
 .containerDraddable {
-  cursor: pointer;
+  cursor: move;
+  opacity: 0;
 }

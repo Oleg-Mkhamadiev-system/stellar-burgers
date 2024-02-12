@@ -5,10 +5,6 @@
     flex-direction: column;
 }
 
-/* .burgerComponents:last-child {
-    display: none;
-} */
-
 .componentsContainer {
     height: 482px;
     overflow-y: scroll;

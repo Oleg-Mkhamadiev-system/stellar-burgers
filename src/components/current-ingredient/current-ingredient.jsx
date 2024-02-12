@@ -12,22 +12,12 @@ function CurrentIngredient ({ item, id, index, moveItemIngredient }) {
   const ref = useRef(null);
   const dispatch = useDispatch();
 
-  const [{ isDrag }, dragRef] = useDrag({
-    type: "ingredient",
-    item: () => {
-        return { id: id, index: index };
-    },
-    collect: (monitor) => ({
-        isDrag: monitor.isDragging(),
-    }),
-  });
-
   const [{ handlerId }, drop] = useDrop({
     accept: "ingredient",
-    collect: (monitor) => {
+    collect(monitor) {
         return {
           handlerId: monitor.getHandlerId(),
-        };
+        }
      },
      hover(item, monitor) {
       if (!ref.current) {
@@ -57,15 +47,25 @@ function CurrentIngredient ({ item, id, index, moveItemIngredient }) {
     }
   });
 
-  dragRef(drop(ref));
+  const [{ isDragging }, drag] = useDrag({
+    type: "ingredient",
+    item: () => {
+        return { id, index };
+    },
+    collect: (monitor) => ({
+        isDragging: monitor.isDragging(),
+    }),
+  });
+
+  drag(drop(ref));
 
   function deleteItem () {
     dispatch(deleteIngredient(item));
   }
 
   return (
-    <div className={`${styles.componentsItem} ${isDrag && styles.containerDraggable}`}
-      ref={dragRef} data-handler-id={handlerId} id={id}>
+    <div className={`${styles.componentsItem} ${isDragging && styles.containerDraggable}`}
+      ref={ref} data-handler-id={handlerId} id={id} draggable>
                       <DragIcon type="primary" />
                       <ConstructorElement
                         extraClass="mb-4"
