@@ -6,13 +6,13 @@ import {
 import { TIngredient } from '@utils-types';
 import { getIngredientsApi } from '@api';
 
-interface IIngredientsState {
+export interface IIngredientsState {
   isLoading: boolean;
   error: null | SerializedError;
   data: TIngredient[];
 }
 
-const initialState: IIngredientsState = {
+export const initialState: IIngredientsState = {
   isLoading: true,
   error: null,
   data: []

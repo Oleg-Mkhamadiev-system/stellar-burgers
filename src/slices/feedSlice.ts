@@ -6,13 +6,13 @@ import {
   SerializedError
 } from '@reduxjs/toolkit';
 
-interface FeedState {
+export interface FeedState {
   feed: TOrdersData | null;
   loading: boolean;
   error: SerializedError | null;
 }
 
-const initialState: FeedState = {
+export const initialState: FeedState = {
   feed: null,
   loading: false,
   error: null
